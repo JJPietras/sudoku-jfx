@@ -12,8 +12,9 @@ public class SudokuBoard {
     public SudokuBoard(SudokuSolver solver) {
         @SuppressWarnings("unchecked")
         List<SudokuField>[] array = new List[Consts.SIZE];
-        SudokuField[] fields = new SudokuField[Consts.SIZE];
+        SudokuField[] fields;
         for (int i = 0; i < Consts.SIZE; i++) {
+            fields = new SudokuField[Consts.SIZE];
             for (int j = 0; j < Consts.SIZE; j++) {
                 fields[j] = new SudokuField();
             }

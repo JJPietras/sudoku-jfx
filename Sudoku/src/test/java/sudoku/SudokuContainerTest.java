@@ -4,22 +4,23 @@ import org.apache.commons.lang.NullArgumentException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 class SudokuContainerTest {
 
     @Test
     void sudokuContainerExceptionsTest() {
         Assertions.assertThrows(
-                NullArgumentException.class,
+                NullPointerException.class,
                 () -> new SudokuColumn(null));
 
         Assertions.assertThrows(
-                NullArgumentException.class,
-                () -> new SudokuColumn(new SudokuField[]
-                        {new SudokuField(), null, null, null, null, null, null, null, null}));
+                NullPointerException.class,
+                () -> new SudokuColumn(Arrays.asList(new SudokuField(), null, null, null, null, null, null, null, null)));
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> new SudokuColumn(new SudokuField[4]));
+                () -> new SudokuColumn(Arrays.asList(new SudokuField[4])));
     }
 
     @Test

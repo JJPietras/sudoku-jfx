@@ -42,6 +42,7 @@ public class SudokuBoard {
         board.get(y).get(x).setFieldValue(value);
     }
 
+    @SuppressWarnings("unused")
     private boolean checkBoard() {
         for (int i = 0; i < Consts.SIZE; i++) {
             if (!(getRow(i).verify() || getColumn(i).verify())) {

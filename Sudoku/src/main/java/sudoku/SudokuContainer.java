@@ -1,16 +1,13 @@
 package sudoku;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.lang.NullArgumentException;
-
 public abstract class SudokuContainer {
 
-    private final HashSet<SudokuField> set = new HashSet<>();
     protected final List<SudokuField> values;
+    private final HashSet<SudokuField> set = new HashSet<>();
 
     public SudokuContainer(List<SudokuField> values) {
         if (values.size() != Consts.SIZE) {
@@ -19,8 +16,8 @@ public abstract class SudokuContainer {
         for (SudokuField field : values) {
             Objects.requireNonNull(field, Consts.NULL_ELEMENT);
         }
-        Objects.requireNonNull(values, Consts.NULL_ARRAY);
-        this.values = values;
+
+        this.values = Objects.requireNonNull(values, Consts.NULL_ARRAY);
     }
 
     public boolean verify() {

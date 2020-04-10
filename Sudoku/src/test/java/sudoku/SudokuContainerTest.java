@@ -1,6 +1,5 @@
 package sudoku;
 
-import org.apache.commons.lang.NullArgumentException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

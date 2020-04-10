@@ -1,8 +1,10 @@
 package sudoku;
 
+import java.util.List;
+
 public class SudokuRow extends SudokuContainer {
 
-    public SudokuRow(SudokuField[] values) {
+    public SudokuRow(List<SudokuField> values) {
         super(values);
     }
 }

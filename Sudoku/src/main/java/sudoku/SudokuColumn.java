@@ -1,7 +1,9 @@
 package sudoku;
 
+import java.util.List;
+
 public class SudokuColumn extends SudokuContainer {
-    public SudokuColumn(SudokuField[] values) {
+    public SudokuColumn(List<SudokuField> values) {
         super(values);
     }
 }

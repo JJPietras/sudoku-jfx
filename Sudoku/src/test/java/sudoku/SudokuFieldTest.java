@@ -4,10 +4,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class SudokuFieldTest {
-    private final SudokuField field = new SudokuField();
+    private SudokuField field = new SudokuField();
+    private SudokuField newField = field;
 
     @Test
-    public void sudokuFieldExceptionsTest() {
+    public void getFieldValueTest() {
+        Assertions.assertEquals(field.getFieldValue(), 0);
+    }
+
+    @Test
+    public void setFieldValueTest() {
         Assertions.assertThrows(
                 IllegalArgumentException.class,
                 () -> field.setFieldValue(-1));
@@ -15,31 +21,43 @@ class SudokuFieldTest {
         Assertions.assertThrows(
                 IllegalArgumentException.class,
                 () -> field.setFieldValue(10));
-    }
 
-    @Test
-    public void sudokuFieldGetSetTest() {
         field.setFieldValue(5);
         Assertions.assertEquals(5, field.getFieldValue());
     }
 
     @Test
     public void toStringTest() {
-        //System.out.println(field.toString());
+        newField = new SudokuField();
+        Assertions.assertEquals(field.toString(), field.toString());
+        Assertions.assertNotEquals(field.toString(), newField.toString());
     }
 
     @Test
     public void equalsTest() {
-        Assertions.assertFalse(field.equals(null));
-        Assertions.assertTrue(field.equals(field));
+        Assertions.assertNotEquals(field, null);
+        Assertions.assertEquals(field, field);
 
-        SudokuField field1 = field;
-        Assertions.assertTrue(field.equals(field1));
+        Assertions.assertEquals(field, newField);
 
-        field1 = new SudokuField();
+        newField = new SudokuField();
         field.setFieldValue(1);
-        Assertions.assertFalse(field.equals(field1));
-        field1.setFieldValue(1);
-        Assertions.assertTrue(field.equals(field1));
+        Assertions.assertNotEquals(field, newField);
+
+        newField.setFieldValue(1);
+        Assertions.assertEquals(field, newField);
+    }
+
+    @Test
+    public void hashCodeTest() {
+        Assertions.assertEquals(field.hashCode(), newField.hashCode());
+
+        field = new SudokuField();
+        field.setFieldValue(9);
+        newField.setFieldValue(9);
+        Assertions.assertEquals(field.hashCode(), newField.hashCode());
+
+        field.setFieldValue(8);
+        Assertions.assertNotEquals(field.hashCode(), newField.hashCode());
     }
 }

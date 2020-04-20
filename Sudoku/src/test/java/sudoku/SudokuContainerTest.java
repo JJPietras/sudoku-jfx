@@ -6,9 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 class SudokuContainerTest {
+    private final SudokuBoard testBoard = new SudokuBoard(new BacktrackingSudokuSolver());
 
     @Test
-    public void sudokuContainerExceptionsTest() {
+    public void constructorTest() {
         Assertions.assertThrows(
                 NullPointerException.class,
                 () -> new SudokuColumn(null));
@@ -23,7 +24,7 @@ class SudokuContainerTest {
     }
 
     @Test
-    public void sudokuContainerTest() {
+    public void verifyTest() {
         SudokuBoard testBoard = new SudokuBoard(new BacktrackingSudokuSolver());
 
         SudokuRow row = testBoard.getRow(0);
@@ -46,26 +47,40 @@ class SudokuContainerTest {
 
     @Test
     public void toStringTest() {
-
+        SudokuRow firstRow = testBoard.getRow(0);
+        SudokuRow secondRow = testBoard.getRow(1);
+        Assertions.assertEquals(firstRow.toString(), firstRow.toString());
+        Assertions.assertNotEquals(firstRow.toString(), secondRow.toString());
     }
 
     @Test
     public void equalsTest() {
-        SudokuBoard testBoard = new SudokuBoard(new BacktrackingSudokuSolver());
-
-        SudokuRow row = testBoard.getRow(0);
-        SudokuRow row1 = testBoard.getRow(1);
+        SudokuRow firstRow = testBoard.getRow(0);
+        SudokuRow secondRow = testBoard.getRow(1);
         SudokuColumn column = testBoard.getColumn(0);
 
-        Assertions.assertTrue(row.equals(row));
-        Assertions.assertFalse(row.equals(null));
-        Assertions.assertFalse(row.equals(column));
+        Assertions.assertEquals(firstRow, firstRow);
+        Assertions.assertNotEquals(firstRow, null);
+        Assertions.assertNotEquals(firstRow, column);
 
-        Assertions.assertTrue(row.equals(row1));
+        Assertions.assertEquals(firstRow, secondRow);
 
         testBoard.setField(0, 0, 2);
-        Assertions.assertFalse(row.equals(row1));
+        Assertions.assertNotEquals(firstRow, secondRow);
         testBoard.setField(0, 1, 2);
-        Assertions.assertTrue(row.equals(row1));
+        Assertions.assertEquals(firstRow, secondRow);
+    }
+
+    @Test
+    public void hashCodeTest() {
+        testBoard.setField(0, 1, 5);
+
+        Assertions.assertEquals(
+                testBoard.getRow(0).hashCode(),
+                testBoard.getRow(0).hashCode());
+
+        Assertions.assertNotEquals(
+                testBoard.getRow(0).hashCode(),
+                testBoard.getRow(1).hashCode());
     }
 }

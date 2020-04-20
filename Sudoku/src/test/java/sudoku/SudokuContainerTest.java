@@ -8,7 +8,7 @@ import java.util.Arrays;
 class SudokuContainerTest {
 
     @Test
-    void sudokuContainerExceptionsTest() {
+    public void sudokuContainerExceptionsTest() {
         Assertions.assertThrows(
                 NullPointerException.class,
                 () -> new SudokuColumn(null));
@@ -23,7 +23,7 @@ class SudokuContainerTest {
     }
 
     @Test
-    void sudokuContainerTest() {
+    public void sudokuContainerTest() {
         SudokuBoard testBoard = new SudokuBoard(new BacktrackingSudokuSolver());
 
         SudokuRow row = testBoard.getRow(0);
@@ -42,5 +42,30 @@ class SudokuContainerTest {
         Assertions.assertTrue(row.verify());
         Assertions.assertTrue(column.verify());
         Assertions.assertTrue(box.verify());
+    }
+
+    @Test
+    public void toStringTest() {
+
+    }
+
+    @Test
+    public void equalsTest() {
+        SudokuBoard testBoard = new SudokuBoard(new BacktrackingSudokuSolver());
+
+        SudokuRow row = testBoard.getRow(0);
+        SudokuRow row1 = testBoard.getRow(1);
+        SudokuColumn column = testBoard.getColumn(0);
+
+        Assertions.assertTrue(row.equals(row));
+        Assertions.assertFalse(row.equals(null));
+        Assertions.assertFalse(row.equals(column));
+
+        Assertions.assertTrue(row.equals(row1));
+
+        testBoard.setField(0, 0, 2);
+        Assertions.assertFalse(row.equals(row1));
+        testBoard.setField(0, 1, 2);
+        Assertions.assertTrue(row.equals(row1));
     }
 }

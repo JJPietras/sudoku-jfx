@@ -1,5 +1,8 @@
 package sudoku;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -96,5 +99,38 @@ public class SudokuBoard {
             }
         }
         return new SudokuBox(box);
+    }
+
+    @Override
+    public final String toString() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < Consts.SIZE; i++) {
+            result.append(getRow(i).toString()).append(System.lineSeparator());
+        }
+        return result.toString();
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        SudokuBoard that = (SudokuBoard) o;
+
+        return new EqualsBuilder()
+                .append(board, that.board)
+                .isEquals();
+    }
+
+    @Override
+    public final int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(board)
+                .toHashCode();
     }
 }

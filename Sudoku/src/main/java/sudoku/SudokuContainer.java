@@ -1,11 +1,12 @@
 package sudoku;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 
 public abstract class SudokuContainer {
 
@@ -30,6 +31,13 @@ public abstract class SudokuContainer {
     }
 
     @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("values", values)
+                .toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -51,12 +59,5 @@ public abstract class SudokuContainer {
         return new HashCodeBuilder(19, 41)
                 .append(values)
                 .toHashCode();
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("values", values)
-                .toString();
     }
 }

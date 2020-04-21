@@ -46,14 +46,6 @@ class SudokuContainerTest {
     }
 
     @Test
-    public void toStringTest() {
-        SudokuRow firstRow = testBoard.getRow(0);
-        SudokuRow secondRow = testBoard.getRow(1);
-        Assertions.assertEquals(firstRow.toString(), firstRow.toString());
-        Assertions.assertNotEquals(firstRow.toString(), secondRow.toString());
-    }
-
-    @Test
     public void equalsTest() {
         SudokuRow firstRow = testBoard.getRow(0);
         SudokuRow secondRow = testBoard.getRow(1);
@@ -82,5 +74,13 @@ class SudokuContainerTest {
         Assertions.assertNotEquals(
                 testBoard.getRow(0).hashCode(),
                 testBoard.getRow(1).hashCode());
+    }
+
+    @Test
+    public void toStringTest() {
+        SudokuRow firstRow = testBoard.getRow(0);
+        SudokuRow secondRow = testBoard.getRow(1);
+        Assertions.assertEquals(firstRow.toString(), firstRow.toString());
+        Assertions.assertNotEquals(firstRow.toString(), secondRow.toString());
     }
 }

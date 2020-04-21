@@ -27,13 +27,6 @@ class SudokuFieldTest {
     }
 
     @Test
-    public void toStringTest() {
-        newField = new SudokuField();
-        Assertions.assertEquals(field.toString(), field.toString());
-        Assertions.assertNotEquals(field.toString(), newField.toString());
-    }
-
-    @Test
     public void equalsTest() {
         Assertions.assertNotEquals(field, null);
         Assertions.assertEquals(field, field);
@@ -59,5 +52,12 @@ class SudokuFieldTest {
 
         field.setFieldValue(8);
         Assertions.assertNotEquals(field.hashCode(), newField.hashCode());
+    }
+
+    @Test
+    public void toStringTest() {
+        newField = new SudokuField();
+        Assertions.assertEquals(field.toString(), field.toString());
+        Assertions.assertNotEquals(field.toString(), newField.toString());
     }
 }

@@ -1,12 +1,11 @@
 package sudoku;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class SudokuBoard {
 
@@ -103,14 +102,6 @@ public class SudokuBoard {
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("sudokuSolver", sudokuSolver)
-                .append("board", board)
-                .toString();
-    }
-
-    @Override
     public final boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -132,5 +123,13 @@ public class SudokuBoard {
         return new HashCodeBuilder(17, 37)
                 .append(board)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("sudokuSolver", sudokuSolver)
+                .append("board", board)
+                .toString();
     }
 }

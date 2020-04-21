@@ -86,15 +86,6 @@ class SudokuBoardTest {
     }
 
     @Test
-    public void toStringTest() {
-        Assertions.assertEquals(sudokuBoard.toString(), sudokuBoard.toString());
-        Assertions.assertNotEquals(
-                sudokuBoard.toString(),
-                new SudokuBoard(new BacktrackingSudokuSolver()).toString()
-        );
-    }
-
-    @Test
     public void equalsTest() {
         Assertions.assertNotEquals(sudokuBoard, null);
         Assertions.assertNotEquals(sudokuBoard, new SudokuField());
@@ -130,5 +121,14 @@ class SudokuBoardTest {
         newSudokuBoard.setField(0, 0, 9);
         newSudokuBoard.setField(1, 0, 9);
         Assertions.assertNotEquals(sudokuBoard.hashCode(), newSudokuBoard.hashCode());
+    }
+
+    @Test
+    public void toStringTest() {
+        Assertions.assertEquals(sudokuBoard.toString(), sudokuBoard.toString());
+        Assertions.assertNotEquals(
+                sudokuBoard.toString(),
+                new SudokuBoard(new BacktrackingSudokuSolver()).toString()
+        );
     }
 }

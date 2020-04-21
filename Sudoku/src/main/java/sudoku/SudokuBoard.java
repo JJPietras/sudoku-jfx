@@ -3,6 +3,9 @@ package sudoku;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class SudokuBoard {
 
@@ -96,5 +99,37 @@ public class SudokuBoard {
             }
         }
         return new SudokuBox(box);
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        SudokuBoard that = (SudokuBoard) o;
+
+        return new EqualsBuilder()
+                .append(board, that.board)
+                .isEquals();
+    }
+
+    @Override
+    public final int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(board)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("sudokuSolver", sudokuSolver)
+                .append("board", board)
+                .toString();
     }
 }

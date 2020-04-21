@@ -3,6 +3,9 @@ package sudoku;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public abstract class SudokuContainer {
 
@@ -24,5 +27,36 @@ public abstract class SudokuContainer {
         set.clear();
         set.addAll(values);
         return set.size() == Consts.SIZE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        SudokuContainer that = (SudokuContainer) o;
+
+        return new EqualsBuilder()
+                .append(values, that.values)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(19, 41)
+                .append(values)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("values", values)
+                .toString();
     }
 }

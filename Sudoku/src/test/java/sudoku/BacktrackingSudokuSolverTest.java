@@ -12,7 +12,7 @@ class BacktrackingSudokuSolverTest {
 
 
     @Test
-    void solvePrimaryTest() {
+    void solveTest() {
         sudokuBoard.solveGame();
         HashSet<Integer> set = new HashSet<>();
         for (int k = 0; k < 2; k++) {
@@ -34,6 +34,17 @@ class BacktrackingSudokuSolverTest {
                 }
                 Assertions.assertEquals(9, set.size());
                 set.clear();
+            }
+        }
+
+        sudokuBoard.solveGame();
+        for (int i = 0; i < 9; i++) {
+            Assertions.assertTrue(sudokuBoard.getColumn(i).verify());
+            Assertions.assertTrue(sudokuBoard.getRow(i).verify());
+        }
+        for (int i = 0; i < 6; i += 3) {
+            for (int j = 0; j < 6; j += 3) {
+                Assertions.assertTrue(sudokuBoard.getBox(i, j).verify());
             }
         }
     }

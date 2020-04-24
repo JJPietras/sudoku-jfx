@@ -34,7 +34,7 @@ class FileSudokuBoardDaoTest {
     }
 
     @Test
-    void closeTest() throws Exception {
+    void closeTest() {
         try (FileSudokuBoardDao ignored = new FileSudokuBoardDao(fileName)) {
             Assertions.assertTrue(true);
         }

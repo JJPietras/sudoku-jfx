@@ -1,4 +1,7 @@
 package sudoku;
 
-public interface Dao {
+public interface Dao<T> {
+    T read();
+
+    void write(T obj);
 }

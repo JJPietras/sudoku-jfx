@@ -2,7 +2,6 @@ package sudoku;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 
 class SudokuContainerTest {
@@ -82,5 +81,24 @@ class SudokuContainerTest {
         SudokuRow secondRow = testBoard.getRow(1);
         Assertions.assertEquals(firstRow.toString(), firstRow.toString());
         Assertions.assertNotEquals(firstRow.toString(), secondRow.toString());
+    }
+
+    @Test
+    public void cloneTest() throws CloneNotSupportedException {
+        SudokuRow firstRow = testBoard.getRow(0);
+        SudokuRow clonedFirstRow = firstRow.clone();
+
+        int firstFieldValue = testBoard.getField(0, 0);
+        int secondFieldValue = testBoard.getField(1, 0);
+
+        testBoard.setField(0, 0, 1);
+        testBoard.setField(1, 0, 1);
+
+        Assertions.assertEquals(firstRow.verify(), clonedFirstRow.verify());
+
+        testBoard.setField(0, 0, firstFieldValue);
+        testBoard.setField(1, 0, secondFieldValue);
+
+        Assertions.assertEquals(firstRow.verify(), clonedFirstRow.verify());
     }
 }

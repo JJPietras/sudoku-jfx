@@ -4,13 +4,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        Parent root = FXMLLoader.load(
+                Objects.requireNonNull(
+                        getClass().getClassLoader().getResource("main_menu.fxml")
+                )
+        );
+        primaryStage.setTitle("Sudoku");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.getScene().getStylesheets().add("main_menu_style.css");
         primaryStage.show();
     }
 

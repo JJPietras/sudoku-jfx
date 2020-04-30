@@ -7,15 +7,13 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="panel" stylesheets="@game_style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="panel" stylesheets="@game_style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
    <center>
-      <GridPane gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="450.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="gridPane" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="450.0" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="150.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="150.0" />
@@ -559,142 +557,131 @@
                </children>
             </GridPane>
          </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" right="40.0" top="20.0" />
+         </BorderPane.margin>
       </GridPane>
    </center>
    <top>
-      <Pane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
+      <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="800.0" BorderPane.alignment="TOP_CENTER">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="750.0">
-               <children>
-                  <TextField editable="false" styleClass="active" text="Game Name:">
-                     <HBox.margin>
-                        <Insets left="30.0" top="10.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </TextField>
-                  <TextField styleClass="active" text="Difficulty:">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="100.0" top="10.0" />
-                     </HBox.margin>
-                  </TextField>
-               </children>
-            </HBox>
-         </children>
-      </Pane>
-   </top>
-   <left>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <VBox alignment="CENTER" layoutX="10.0" layoutY="25.0" prefHeight="450.0" prefWidth="180.0">
-               <children>
-                  <TextField alignment="CENTER" editable="false" styleClass="logo" text="Sudoku">
-                     <font>
-                        <Font name="System Bold Italic" size="36.0" />
-                     </font>
-                  </TextField>
-                  <Button mnemonicParsing="false" prefWidth="100.0" text="Check">
-                     <VBox.margin>
-                        <Insets top="15.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" prefWidth="100.0" text="Mark">
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" prefWidth="100.0" text="Input">
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" prefWidth="100.0" text="Solve">
-                     <VBox.margin>
-                        <Insets bottom="20.0" top="20.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" prefWidth="150.0" text="New Board">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" prefWidth="150.0" text="Load Board">
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" prefWidth="150.0" text="Save Board">
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" prefWidth="100.0" text="Quit">
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Button>
-               </children>
-            </VBox>
-         </children>
-         <BorderPane.margin>
-            <Insets left="20.0" />
-         </BorderPane.margin>
-      </Pane>
-   </left>
-   <bottom>
-      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <TextField styleClass="active" text="Elapsed Time:">
-               <font>
-                  <Font size="24.0" />
-               </font>
+            <TextField fx:id="gameName" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="290.0" styleClass="active" text="Game Name:">
                <HBox.margin>
-                  <Insets bottom="10.0" left="30.0" />
+                  <Insets left="30.0" top="5.0" />
                </HBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
             </TextField>
-            <TextField prefHeight="46.0" prefWidth="352.0" styleClass="active" text="Authors: Jakub Pietras Bartłomiej Graczyk">
+            <TextField fx:id="difficulty" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="290.0" styleClass="active" text="Difficulty:">
                <font>
                   <Font size="18.0" />
                </font>
                <HBox.margin>
-                  <Insets bottom="10.0" left="45.0" />
+                  <Insets left="100.0" top="5.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+   </top>
+   <left>
+      <VBox alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="180.0" scaleX="0.9" scaleY="0.9">
+         <children>
+            <TextField alignment="CENTER" editable="false" styleClass="logo" text="Sudoku">
+               <font>
+                  <Font name="System Bold Italic" size="36.0" />
+               </font>
+            </TextField>
+            <Button mnemonicParsing="false" prefWidth="100.0" text="Check">
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefWidth="100.0" text="Mark">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefWidth="100.0" text="Input">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefWidth="100.0" text="Solve">
+               <VBox.margin>
+                  <Insets bottom="20.0" top="20.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefWidth="150.0" text="New Board">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefWidth="150.0" text="Load Board">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefWidth="150.0" text="Save Board">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#quitGameMode" prefWidth="100.0" text="Quit">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+         </children>
+         <BorderPane.margin>
+            <Insets left="22.0" />
+         </BorderPane.margin>
+      </VBox>
+   </left>
+   <bottom>
+      <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="800.0" BorderPane.alignment="BOTTOM_CENTER">
+         <children>
+            <TextField fx:id="elapsedTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="290.0" styleClass="active" text="Elapsed Time:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="30.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="370.0" styleClass="active" text="Authors: Jakub Pietras &amp; Bartłomiej Graczyk">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="45.0" />
                </HBox.margin>
             </TextField>
          </children>
       </HBox>
    </bottom>
-   <right>
-      <Pane prefHeight="200.0" prefWidth="50.0" BorderPane.alignment="CENTER" />
-   </right>
 </BorderPane>

@@ -7,6 +7,11 @@
    -fx-text-fill: #FAFAFA;
 }
 
+.button:pressed {
+    -fx-background-color: #CC2060;
+       -fx-text-fill: #FAFAFA;
+}
+
 .radio {
     -fx-text-fill: #CCCCCC;
 }
@@ -50,6 +55,6 @@
 }
 
 .radio-button:selected .radio .dot {
-    -fx-background-color: #00CCAA;
+    -fx-background-color: #CC2060;
     -fx-background-insets: 0;
 }

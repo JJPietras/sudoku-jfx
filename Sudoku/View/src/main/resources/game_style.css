@@ -28,6 +28,12 @@
    -fx-background-radius: 2 2 2 2;
 }
 
+.button:pressed {
+    -fx-background-color: #CC2060;
+    -fx-text-fill: #FAFAFA;
+    -fx-background-radius: 2 2 2 2;
+}
+
 .saturatedField {
     -fx-background-color: #77CCAA;
 }

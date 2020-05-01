@@ -1,5 +1,6 @@
 package sudoku;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -7,7 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public abstract class SudokuContainer {
+public abstract class SudokuContainer implements Serializable, Cloneable {
 
     protected final List<SudokuField> values;
     private final HashSet<SudokuField> set = new HashSet<>();
@@ -58,5 +59,10 @@ public abstract class SudokuContainer {
         return new ToStringBuilder(this)
                 .append("values", values)
                 .toString();
+    }
+
+    @Override
+    protected SudokuContainer clone() throws CloneNotSupportedException {
+        return (SudokuContainer) super.clone();
     }
 }

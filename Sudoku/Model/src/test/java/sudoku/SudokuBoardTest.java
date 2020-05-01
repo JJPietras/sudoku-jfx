@@ -131,4 +131,26 @@ class SudokuBoardTest {
                 new SudokuBoard(new BacktrackingSudokuSolver()).toString()
         );
     }
+
+    @Test
+    public void cloneTest() {
+        sudokuBoard.solveGame();
+        SudokuBoard clonedSudokuBoard = sudokuBoard.clone();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                Assertions.assertEquals(
+                        sudokuBoard.getField(i, j),
+                        clonedSudokuBoard.getField(i, j)
+                );
+            }
+        }
+
+        sudokuBoard.setField(0, 0, 3);
+        clonedSudokuBoard.setField(0, 0, 4);
+
+        Assertions.assertNotEquals(
+                sudokuBoard.getField(0, 0),
+                clonedSudokuBoard.getField(0, 0)
+        );
+    }
 }

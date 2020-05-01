@@ -1,5 +1,11 @@
 package sudoku;
 
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +14,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class SudokuBoard implements Serializable {
+public class SudokuBoard implements Serializable, Cloneable {
 
     private final SudokuSolver sudokuSolver;
     private final List<List<SudokuField>> board;
@@ -132,5 +138,28 @@ public class SudokuBoard implements Serializable {
                 .append("sudokuSolver", sudokuSolver)
                 .append("board", board)
                 .toString();
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    protected SudokuBoard clone() {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(this);
+
+            ByteArrayInputStream byteArrayInputStream =
+                    new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            try {
+                return (SudokuBoard) objectInputStream.readObject();
+            } catch (ClassNotFoundException exception) {
+                return null;
+            }
+        } catch (IOException exception) {
+            return null;
+        }
+
     }
 }

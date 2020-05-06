@@ -1,3 +1,5 @@
+package view;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +16,7 @@ public class MenuController {
     private ToggleGroup difficultyGroup;
 
     public void startGame() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game.fxml"));
         Parent root = loader.load();
         GameController gameController = loader.getController();
 

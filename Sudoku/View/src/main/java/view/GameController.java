@@ -10,8 +10,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import sudoku.Difficulty;
 import sudoku.GameState;
+
 import javax.swing.*;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,7 +36,11 @@ public class GameController {
 
     public void quitGameMode() throws IOException {
         new FXMLLoader();
-        Parent root = FXMLLoader.load(getClass().getResource("main_menu.fxml"));
+        Parent root = FXMLLoader.load(
+                Objects.requireNonNull(
+                        getClass().getClassLoader().getResource("main_menu.fxml")
+                )
+        );
         Main.stage.setScene(new Scene(root));
     }
 

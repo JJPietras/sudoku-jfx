@@ -1,9 +1,8 @@
 package sudoku;
 
+import java.util.Objects;
 import java.util.Random;
-import lombok.Data;
 
-@Data
 public class GameState {
 
     private SudokuBoard completeBoard;
@@ -35,4 +34,27 @@ public class GameState {
         }
     }
 
+    public SudokuBoard getCompleteBoard() {
+        return completeBoard;
+    }
+
+    public void setCompleteBoard(SudokuBoard completeBoard) {
+        this.completeBoard = Objects.requireNonNull(completeBoard);
+    }
+
+    public SudokuBoard getUserBoard() {
+        return userBoard;
+    }
+
+    public void setUserBoard(SudokuBoard userBoard) {
+        this.userBoard = Objects.requireNonNull(userBoard);
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public String getGameName() {
+        return gameName;
+    }
 }

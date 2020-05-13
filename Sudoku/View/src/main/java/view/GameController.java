@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -19,32 +18,12 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Timer;
-import java.util.*;
+import java.util.TimerTask;
 
 public class GameController implements Initializable {
-
-    private final EventHandler<KeyEvent> onFieldInput = keyEvent -> {
-        String input = keyEvent.getCharacter();
-        TextField field = (TextField) keyEvent.getTarget();
-        if (!input.matches("[1-9]") && !input.equals("") || field.getText().length() > 1) {
-            //keyEvent.getCharacter().replace(keyEvent);
-            if (input.matches("[1-9]")) {
-                field.setText(input);
-            } else {
-                field.setText("");
-            }
-        }
-    };
-
-    @FXML
-    Button solveBt, checkBt;
-
-    @FXML
-    Button newBoardBt, loadBoardBt, saveBoardBt;
-
-    @FXML
-    Button quitBt;
 
     @FXML
     GridPane gridPane;
@@ -71,6 +50,7 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.resourceBundle = resourceBundle;
+        addCheckingToFields();
         authorsDisplay();
     }
 
@@ -95,6 +75,47 @@ public class GameController implements Initializable {
                 setFieldValue(i, j, String.valueOf(gameState.getUserBoard().getField(i, j)));
                 setFieldValidator(i, j, onFieldInput);
             }
+        }
+    }
+
+    private void addCheckingToFields() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                getField(j, i).setOnKeyReleased(this::checkInputText);
+            }
+        }
+    }
+
+    public void newGame() {
+        gameState = new GameState(gameState.getDifficulty(), "Sudoku");
+        displayGame();
+    }
+
+    private final EventHandler<KeyEvent> onFieldInput = keyEvent -> {
+        String input = keyEvent.getCharacter();
+        TextField field = (TextField) keyEvent.getTarget();
+        if (!input.matches("[1-9]") && !input.equals("") || field.getText().length() > 1) {
+            if (input.matches("[1-9]")) {
+                field.setText(input);
+            } else {
+                field.setText("");
+            }
+        }
+    };
+
+    @FXML
+    private void checkInputText(KeyEvent event) {
+        TextField textField = (TextField) event.getSource();
+        String value = textField.getText();
+        textField.setStyle("-fx-text-fill: black;");
+        if (value.length() == 1) {
+            try {
+                Integer.parseInt(value);
+            } catch (NumberFormatException exception) {
+                textField.setText("");
+            }
+        } else {
+            textField.setText("");
         }
     }
 

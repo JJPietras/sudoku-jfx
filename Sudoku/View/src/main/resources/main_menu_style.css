@@ -2,12 +2,12 @@
     -fx-background-color: #404040;
 }
 
-.button {
+.button, .toggle-button {
    -fx-background-color: #00AA99;
    -fx-text-fill: #FAFAFA;
 }
 
-.button:pressed {
+.button:pressed, .toggle-button:selected {
     -fx-background-color: #CC2060;
        -fx-text-fill: #FAFAFA;
 }

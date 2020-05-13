@@ -1,13 +1,5 @@
 package view;
 
-import javax.swing.*;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,15 +10,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.SepiaTone;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import sudoku.BacktrackingSudokuSolver;
-import sudoku.Difficulty;
-import sudoku.GameState;
-import sudoku.SudokuBoard;
+import javafx.stage.FileChooser;
+import sudoku.*;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Timer;
+import java.util.*;
 
 public class GameController implements Initializable {
 
@@ -42,13 +36,6 @@ public class GameController implements Initializable {
             }
         }
     };
-
-    ResourceBundle resourceBundle;
-
-    SudokuBoard sudokuBoard = new SudokuBoard(new BacktrackingSudokuSolver());
-
-    @FXML
-    Button enLang, plLang;
 
     @FXML
     Button solveBt, checkBt;
@@ -74,70 +61,95 @@ public class GameController implements Initializable {
     @FXML
     TextField authors;
 
-    private GameState gameState;
     private int i = 0;
+
+    private ResourceBundle resourceBundle;
+
+    private GameState gameState;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setLanguage("pl");
-        resourceBundle = this.resourceBundle;
-        checkBt.setText(resourceBundle.getString("CheckButton"));
-        //solveBt.setText(resourceBundle.getString("SolveButton"));
-        newBoardBt.setText(resourceBundle.getString("NewBoardButton"));
-        loadBoardBt.setText(resourceBundle.getString("LoadBoardButton"));
-        saveBoardBt.setText(resourceBundle.getString("SaveBoardButton"));
-        //quitBt.setText(resourceBundle.getString("QuitButton"));
+        this.resourceBundle = resourceBundle;
         authorsDisplay();
     }
 
     public void quitGameMode() throws IOException {
-        new FXMLLoader();
-        Parent root = FXMLLoader.load(
-                Objects.requireNonNull(
-                        getClass().getClassLoader().getResource("main_menu.fxml")
-                )
-        );
-
+        ResourceBundle bundle = ResourceBundle.getBundle("textMenu", resourceBundle.getLocale());
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main_menu.fxml"), bundle);
+        Parent root = loader.load();
         Main.stage.setScene(new Scene(root));
-    }
-
-    private void setLanguage(String language) {
-        Locale.setDefault(new Locale(language));
-        this.resourceBundle = ResourceBundle.getBundle("textGame", Locale.getDefault());
-
-        Button newLanguage;
-        Button prevLanguage;
-        switch (language) {
-            case "pl":
-                newLanguage = plLang;
-                prevLanguage = enLang;
-                break;
-            case "en":
-                newLanguage = enLang;
-                prevLanguage = plLang;
-                break;
-            default:
-                throw new IllegalArgumentException(
-                        "Unexpected value: " + language
-                );
-        }
-
-        prevLanguage.setEffect(new Blend());
-        newLanguage.setEffect(new DropShadow());
-        newLanguage.setEffect(new SepiaTone());
     }
 
     public void startup(Difficulty difficulty) {
         gameState = new GameState(difficulty);
+        displayGame();
+        this.difficulty.setText(resourceBundle.getString("DifficultyLabel").concat(difficulty.name()));
+        gameName.setText(resourceBundle.getString("GameNameLabel").concat(gameState.getGameName()));
+        timerDisplay();
+    }
+
+    private void displayGame() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 setFieldValue(i, j, String.valueOf(gameState.getUserBoard().getField(i, j)));
                 setFieldValidator(i, j, onFieldInput);
             }
         }
-        this.difficulty.setText(resourceBundle.getString("DifficultyLabel").concat(difficulty.name()));
-        gameName.setText(resourceBundle.getString("GameNameLabel").concat(gameState.getGameName()));
-        timerDisplay();
+    }
+
+    public void verify() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (!getField(j, i).getText().equals("")) {
+                    gameState.getUserBoard().setField(j, i, Integer.parseInt(getField(j, i).getText()));
+                }
+                getField(j, i).setStyle("-fx-text-fill: black;");
+                if (!getField(j, i).getText().equals("") && !gameState.compareFields(j, i)) {
+                    getField(j, i).setStyle("-fx-text-fill: red;");
+                }
+            }
+        }
+    }
+
+    public void solve() {
+        SudokuBoard board = gameState.getCompleteBoard();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                getField(j, i).setStyle("-fx-text-fill: black;");
+                getField(j, i).setText(Integer.toString(board.getField(j, i)));
+            }
+        }
+    }
+
+    public void resetStyle() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                getField(j, i).setStyle("-fx-text-fill: black;");
+            }
+        }
+    }
+
+    public void saveBoard() {
+        SudokuBoard sudokuBoard = gameState.getCompleteBoard();
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(Main.stage);
+        if (file != null) {
+            Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(file.getAbsolutePath());
+            fileSudokuBoardDao.write(sudokuBoard);
+        }
+    }
+
+    public void loadBoard() {
+        resetStyle();
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(Main.stage);
+        if (file != null) {
+            Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(file.getAbsolutePath());
+            SudokuBoard board = fileSudokuBoardDao.read();
+            gameState = new GameState(board, gameState.getDifficulty(), gameState.getGameName());
+            displayGame();
+        }
     }
 
     private TextField getField(int x, int y) {

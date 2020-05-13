@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="panel" stylesheets="@game_style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GameController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="panel" stylesheets="@game_style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GameController">
    <center>
       <GridPane fx:id="gridPane" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="450.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -37,7 +31,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="50.0" styleClass="desaturatedField" text="7">
+                  <TextField alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="1" prefHeight="50.0" prefWidth="50.0" styleClass="desaturatedField" text="7">
                      <font>
                         <Font name="Cambria" size="24.0" />
                      </font>
@@ -573,7 +567,7 @@
                   <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="difficulty" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="290.0" styleClass="active" text="Difficulty:">
+            <TextField fx:id="difficulty" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="290.0" styleClass="active" text="Difficulty:">
                <font>
                   <Font size="18.0" />
                </font>
@@ -592,7 +586,27 @@
                   <Font name="System Bold Italic" size="36.0" />
                </font>
             </TextField>
-            <Button mnemonicParsing="false" prefWidth="100.0" text="Check">
+            <HBox alignment="CENTER" prefHeight="63.0" prefWidth="130.0">
+               <children>
+                  <Button fx:id="enLang" mnemonicParsing="false" prefHeight="48.0" prefWidth="60.0" text="EN">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="5.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="plLang" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="60.0" text="PL">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="5.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <Button fx:id="checkBt" mnemonicParsing="false" prefWidth="100.0" text="Check">
                <VBox.margin>
                   <Insets top="15.0" />
                </VBox.margin>
@@ -600,23 +614,7 @@
                   <Font size="22.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefWidth="100.0" text="Mark">
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefWidth="100.0" text="Input">
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefWidth="100.0" text="Solve">
+            <Button fx:id="solveBt" mnemonicParsing="false" prefWidth="100.0" text="Solve">
                <VBox.margin>
                   <Insets bottom="20.0" top="20.0" />
                </VBox.margin>
@@ -624,7 +622,7 @@
                   <Font size="22.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefWidth="150.0" text="New Board">
+            <Button fx:id="newBoardBt" mnemonicParsing="false" prefWidth="150.0" text="New Board">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -632,7 +630,7 @@
                   <Font size="22.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefWidth="150.0" text="Load Board">
+            <Button fx:id="loadBoardBt" mnemonicParsing="false" prefWidth="150.0" text="Load Board">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
@@ -640,7 +638,7 @@
                   <Font size="22.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefWidth="150.0" text="Save Board">
+            <Button fx:id="saveBoardBt" mnemonicParsing="false" prefWidth="150.0" text="Save Board">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
@@ -648,7 +646,7 @@
                   <Font size="22.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#quitGameMode" prefWidth="100.0" text="Quit">
+            <Button fx:id="quitBt" mnemonicParsing="false" onAction="#quitGameMode" prefWidth="100.0" text="Quit">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>
@@ -665,7 +663,7 @@
    <bottom>
       <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="800.0" BorderPane.alignment="BOTTOM_CENTER">
          <children>
-            <TextField fx:id="elapsedTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="290.0" styleClass="active" text="Elapsed Time:">
+            <TextField fx:id="elapsedTime" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="290.0" styleClass="active" text="Elapsed Time:">
                <font>
                   <Font size="18.0" />
                </font>
@@ -673,7 +671,7 @@
                   <Insets bottom="5.0" left="30.0" />
                </HBox.margin>
             </TextField>
-            <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="370.0" styleClass="active" text="Authors: Jakub Pietras &amp; Bartłomiej Graczyk">
+            <TextField fx:id="authors" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="370.0" styleClass="active" text="Authors: Jakub Pietras &amp; Bartłomiej Graczyk">
                <font>
                   <Font size="18.0" />
                </font>

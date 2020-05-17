@@ -2,6 +2,7 @@ package sudoku;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import sudoku.exceptions.InvalidFieldValueException;
 
 class SudokuFieldTest {
     private SudokuField field = new SudokuField();
@@ -13,13 +14,13 @@ class SudokuFieldTest {
     }
 
     @Test
-    public void setFieldValueTest() {
+    public void setFieldValueTest() throws InvalidFieldValueException {
         Assertions.assertThrows(
-                IllegalArgumentException.class,
+                InvalidFieldValueException.class,
                 () -> field.setFieldValue(-1));
 
         Assertions.assertThrows(
-                IllegalArgumentException.class,
+                InvalidFieldValueException.class,
                 () -> field.setFieldValue(10));
 
         field.setFieldValue(5);
@@ -27,7 +28,7 @@ class SudokuFieldTest {
     }
 
     @Test
-    public void equalsTest() {
+    public void equalsTest() throws InvalidFieldValueException {
         Assertions.assertNotEquals(field, null);
         Assertions.assertEquals(field, field);
 
@@ -42,7 +43,7 @@ class SudokuFieldTest {
     }
 
     @Test
-    public void hashCodeTest() {
+    public void hashCodeTest() throws InvalidFieldValueException {
         Assertions.assertEquals(field.hashCode(), newField.hashCode());
 
         field = new SudokuField();
@@ -62,7 +63,7 @@ class SudokuFieldTest {
     }
 
     @Test
-    public void cloneTest() throws CloneNotSupportedException {
+    public void cloneTest() throws CloneNotSupportedException, InvalidFieldValueException {
         newField.setFieldValue(7);
         SudokuField testerField = newField.clone();
         testerField.setFieldValue(4);
@@ -70,7 +71,7 @@ class SudokuFieldTest {
     }
 
     @Test
-    public void compareToTest() {
+    public void compareToTest() throws InvalidFieldValueException {
         newField.setFieldValue(5);
         SudokuField testerField = new SudokuField();
         testerField.setFieldValue(4);

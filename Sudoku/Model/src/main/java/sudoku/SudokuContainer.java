@@ -1,27 +1,44 @@
 package sudoku;
 
 import java.io.Serializable;
+import java.security.InvalidParameterException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import sudoku.exceptions.InvalidContainerLengthException;
+import sudoku.exceptions.NullContainerException;
+import sudoku.exceptions.SudokuContainerException;
 
 public abstract class SudokuContainer implements Serializable, Cloneable {
 
     protected final List<SudokuField> values;
     private final HashSet<SudokuField> set = new HashSet<>();
 
-    public SudokuContainer(List<SudokuField> values) {
+    public SudokuContainer(List<SudokuField> values) throws SudokuContainerException {
+        try {
+            this.values = Objects.requireNonNull(values, Consts.NULL_ARRAY);
+        } catch (NullPointerException exception) {
+            throw new NullContainerException(
+                    Consts.NULL_ARRAY,
+                    exception
+            );
+        }
         if (values.size() != Consts.SIZE) {
-            throw new IllegalArgumentException(Consts.INVALID_LENGTH);
+            throw new InvalidContainerLengthException(
+                    Consts.INVALID_LENGTH,
+                    new InvalidParameterException()
+            );
         }
         for (SudokuField field : values) {
-            Objects.requireNonNull(field, Consts.NULL_ELEMENT);
+            try {
+                Objects.requireNonNull(field, Consts.NULL_ELEMENT);
+            } catch (NullPointerException exception) {
+                throw new NullContainerException(Consts.NULL_ARRAY, exception);
+            }
         }
-
-        this.values = Objects.requireNonNull(values, Consts.NULL_ARRAY);
     }
 
     public boolean verify() {

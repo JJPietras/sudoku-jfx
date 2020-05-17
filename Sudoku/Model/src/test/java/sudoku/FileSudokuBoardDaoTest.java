@@ -6,6 +6,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import sudoku.exceptions.FieldOutOfBoundsException;
+import sudoku.exceptions.InvalidFieldValueException;
+import sudoku.exceptions.ReadBoardException;
+import sudoku.exceptions.WriteBoardException;
 
 class FileSudokuBoardDaoTest {
     private final static String fileName = "SavedBoard.board";
@@ -14,12 +18,12 @@ class FileSudokuBoardDaoTest {
             new SudokuBoardDaoFactory().getFileDao(fileName);
 
     @BeforeAll
-    static void initialize() {
+    static void initialize() throws FieldOutOfBoundsException, InvalidFieldValueException {
         board.solveGame();
     }
 
     @Test
-    void writeTest() {
+    void writeTest() throws WriteBoardException {
         fileSudokuBoardDao.write(board);
         File file = new File(fileName);
         Assertions.assertTrue(file.exists());
@@ -27,7 +31,7 @@ class FileSudokuBoardDaoTest {
     }
 
     @Test
-    void readTest() {
+    void readTest() throws ReadBoardException {
         SudokuBoard loadedBoard = fileSudokuBoardDao.read();
         Assertions.assertNotNull(loadedBoard);
         Assertions.assertEquals(loadedBoard, board);

@@ -1,5 +1,12 @@
 package view;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -12,16 +19,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
-import sudoku.*;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.swing.SwingUtilities;
+import sudoku.Dao;
+import sudoku.Difficulty;
+import sudoku.GameState;
+import sudoku.SudokuBoard;
+import sudoku.SudokuBoardDaoFactory;
+import sudoku.exceptions.FieldOutOfBoundsException;
+import sudoku.exceptions.InvalidFieldValueException;
+import sudoku.exceptions.ReadBoardException;
+import sudoku.exceptions.WriteBoardException;
 
 public class GameController implements Initializable {
 
@@ -46,7 +53,6 @@ public class GameController implements Initializable {
 
     private GameState gameState;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.resourceBundle = resourceBundle;
@@ -59,10 +65,17 @@ public class GameController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main_menu.fxml"), bundle);
         Parent root = loader.load();
         Main.stage.setScene(new Scene(root));
+        Main.logger.info("Game closed");
     }
 
     public void startup(Difficulty difficulty) {
-        gameState = new GameState(difficulty);
+        Main.logger.info("Created new game, difficulty: " + difficulty.toString());
+        try {
+            gameState = new GameState(difficulty);
+        } catch (FieldOutOfBoundsException | InvalidFieldValueException e) {
+            Main.logger.error("Error creating new GameState - invalid parameters");
+            e.printStackTrace();
+        }
         displayGame();
         this.difficulty.setText(resourceBundle.getString("DifficultyLabel").concat(difficulty.name()));
         gameName.setText(resourceBundle.getString("GameNameLabel").concat(gameState.getGameName()));
@@ -72,8 +85,12 @@ public class GameController implements Initializable {
     private void displayGame() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                setFieldValue(i, j, String.valueOf(gameState.getUserBoard().getField(i, j)));
-                setFieldValidator(i, j, onFieldInput);
+                try {
+                    setFieldValue(j, i, String.valueOf(gameState.getUserBoard().getField(j, i)));
+                } catch (FieldOutOfBoundsException e) {
+                    Main.logger.error("Field indexes are wrong");
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -82,12 +99,19 @@ public class GameController implements Initializable {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 getField(j, i).setOnKeyReleased(this::checkInputText);
+                setFieldValidator(j, i, onFieldInput);
             }
         }
     }
 
     public void newGame() {
-        gameState = new GameState(gameState.getDifficulty(), "Sudoku");
+        try {
+            gameState = new GameState(gameState.getDifficulty(), "Sudoku");
+        } catch (FieldOutOfBoundsException | InvalidFieldValueException e) {
+            Main.logger.error("Error creating new GameState - invalid parameters");
+            e.printStackTrace();
+        }
+        Main.logger.info("Created new game");
         displayGame();
     }
 
@@ -119,7 +143,7 @@ public class GameController implements Initializable {
         }
     }
 
-    public void verify() {
+    public void verify() throws FieldOutOfBoundsException, InvalidFieldValueException {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (!getField(j, i).getText().equals("")) {
@@ -133,7 +157,7 @@ public class GameController implements Initializable {
         }
     }
 
-    public void solve() {
+    public void solve() throws FieldOutOfBoundsException {
         SudokuBoard board = gameState.getCompleteBoard();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -141,6 +165,7 @@ public class GameController implements Initializable {
                 getField(j, i).setText(Integer.toString(board.getField(j, i)));
             }
         }
+        Main.logger.info("Performed solve operation");
     }
 
     public void resetStyle() {
@@ -157,7 +182,12 @@ public class GameController implements Initializable {
         File file = fileChooser.showSaveDialog(Main.stage);
         if (file != null) {
             Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(file.getAbsolutePath());
-            fileSudokuBoardDao.write(sudokuBoard);
+            try {
+                fileSudokuBoardDao.write(sudokuBoard);
+            } catch (WriteBoardException e) {
+                Main.logger.error("Could not save board to selected file");
+                e.printStackTrace();
+            }
         }
     }
 
@@ -167,16 +197,29 @@ public class GameController implements Initializable {
         File file = fileChooser.showOpenDialog(Main.stage);
         if (file != null) {
             Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(file.getAbsolutePath());
-            SudokuBoard board = fileSudokuBoardDao.read();
-            gameState = new GameState(board, gameState.getDifficulty(), gameState.getGameName());
+            SudokuBoard board = null;
+            try {
+                board = fileSudokuBoardDao.read();
+            } catch (ReadBoardException e) {
+                Main.logger.error("Could not read selected file");
+                e.printStackTrace();
+            }
+            try {
+                gameState = new GameState(board, gameState.getDifficulty(), gameState.getGameName());
+            } catch (FieldOutOfBoundsException | InvalidFieldValueException e) {
+                Main.logger.error("Error creating new GameState - invalid parameters");
+                e.printStackTrace();
+            }
             displayGame();
+        } else {
+            Main.logger.error("Wrong file or none selected");
         }
     }
 
     private TextField getField(int x, int y) {
         ObservableList<Node> subGrids = gridPane.getChildren();
-        ObservableList<Node> boxFields = ((GridPane) subGrids.get((y / 3) * 3 + (x / 3))).getChildren();
-        return (TextField) (boxFields.get((y % 3) * 3 + (x % 3)));
+        ObservableList<Node> boxFields = ((GridPane) subGrids.get(((y / 3) * 3) + (x / 3))).getChildren();
+        return (TextField) (boxFields.get(((y % 3) * 3) + (x % 3)));
     }
 
     private void setFieldValue(int x, int y, String value) {
@@ -198,7 +241,9 @@ public class GameController implements Initializable {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                SwingUtilities.invokeLater(() -> elapsedTime.setText(resourceBundle.getString("TimeLabel") + i++));
+                SwingUtilities.invokeLater(
+                        () -> elapsedTime.setText(resourceBundle.getString("TimeLabel") + i++)
+                );
             }
         }, 0, 1000);
     }

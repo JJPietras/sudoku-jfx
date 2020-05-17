@@ -1,5 +1,9 @@
 package view;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,15 +17,13 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import sudoku.Difficulty;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 public class MenuController implements Initializable {
 
     @FXML
-    Button enLang, plLang;
+    Button enLang;
+
+    @FXML
+    Button plLang;
 
     @FXML
     private ToggleGroup difficultyGroup;
@@ -33,14 +35,10 @@ public class MenuController implements Initializable {
         String lang = ((Button) actionEvent.getSource()).getText();
         try {
             setLanguage(lang.toLowerCase());
-            System.out.println(Locale.getDefault().toString());
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     };
-
-
 
 
     @Override
@@ -51,6 +49,7 @@ public class MenuController implements Initializable {
     }
 
     public void startGame() throws IOException {
+        Main.logger.info("Starting new game");
         ResourceBundle bundle = ResourceBundle.getBundle("textGame", resourceBundle.getLocale());
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game.fxml"), bundle);
         Difficulty difficulty;
@@ -62,6 +61,7 @@ public class MenuController implements Initializable {
         } else if (level.equals((resourceBundle.getString("HardRadioButton")))) {
             difficulty = Difficulty.HARD;
         } else {
+            Main.logger.error("Invalid difficulty state");
             throw new IllegalStateException(
                     "Unexpected value: " + difficultyGroup.getSelectedToggle().toString()
             );
@@ -83,6 +83,7 @@ public class MenuController implements Initializable {
     }
 
     public void quitApplication() {
+        Main.logger.info("Exiting application");
         Platform.exit();
         System.exit(0);
     }

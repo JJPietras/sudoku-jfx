@@ -13,6 +13,11 @@ import java.util.Objects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import sudoku.exceptions.ContainerOutOfBoundsException;
+import sudoku.exceptions.FieldOutOfBoundsException;
+import sudoku.exceptions.InvalidFieldValueException;
+import sudoku.exceptions.SudokuBoardException;
+import sudoku.exceptions.SudokuContainerException;
 
 public class SudokuBoard implements Serializable, Cloneable {
 
@@ -34,26 +39,33 @@ public class SudokuBoard implements Serializable, Cloneable {
         sudokuSolver = Objects.requireNonNull(solver);
     }
 
-    public void solveGame() {
+    public void solveGame() throws FieldOutOfBoundsException, InvalidFieldValueException {
         sudokuSolver.solve(this);
     }
 
-    public int getField(int x, int y) {
+    public int getField(int x, int y) throws FieldOutOfBoundsException {
         if (x < 0 || y < 0 || x >= Consts.SIZE || y >= Consts.SIZE) {
-            throw new ArrayIndexOutOfBoundsException(Consts.OUT_OF_BOUNDS);
+            throw new FieldOutOfBoundsException(
+                    Consts.OUT_OF_BOUNDS,
+                    new ArrayIndexOutOfBoundsException()
+            );
         }
         return board.get(y).get(x).getFieldValue();
     }
 
-    public void setField(int x, int y, int value) {
+    public void setField(int x, int y, int value) throws
+            FieldOutOfBoundsException, InvalidFieldValueException {
         if (x < 0 || y < 0 || x >= Consts.SIZE || y >= Consts.SIZE) {
-            throw new ArrayIndexOutOfBoundsException(Consts.OUT_OF_BOUNDS);
+            throw new FieldOutOfBoundsException(
+                    Consts.OUT_OF_BOUNDS,
+                    new ArrayIndexOutOfBoundsException()
+            );
         }
         board.get(y).get(x).setFieldValue(value);
     }
 
     @SuppressWarnings("unused")
-    private boolean checkBoard() {
+    private boolean checkBoard() throws SudokuBoardException, SudokuContainerException {
         for (int i = 0; i < Consts.SIZE; i++) {
             if (!(getRow(i).verify() || getColumn(i).verify())) {
                 return false;
@@ -69,16 +81,22 @@ public class SudokuBoard implements Serializable, Cloneable {
         return true;
     }
 
-    SudokuRow getRow(int y) {
+    SudokuRow getRow(int y) throws ContainerOutOfBoundsException, SudokuContainerException {
         if (y < 0 || y > 8) {
-            throw new IllegalArgumentException(Consts.ROW_OUT_OF_BOUNDS + y);
+            throw new ContainerOutOfBoundsException(
+                    Consts.ROW_OUT_OF_BOUNDS + " " + y,
+                    new IllegalArgumentException()
+            );
         }
         return new SudokuRow(board.get(y));
     }
 
-    SudokuColumn getColumn(int x) {
+    SudokuColumn getColumn(int x) throws ContainerOutOfBoundsException, SudokuContainerException {
         if (x < 0 || x > 8) {
-            throw new IllegalArgumentException(Consts.COL_OUT_OF_BOUNDS + " " + x);
+            throw new ContainerOutOfBoundsException(
+                    Consts.COL_OUT_OF_BOUNDS + " " + x,
+                    new IllegalArgumentException()
+            );
         }
         List<SudokuField> column = Arrays.asList(new SudokuField[Consts.SIZE]);
         for (int i = 0; i < Consts.SIZE; i++) {
@@ -87,12 +105,18 @@ public class SudokuBoard implements Serializable, Cloneable {
         return new SudokuColumn(column);
     }
 
-    SudokuBox getBox(int x, int y) {
+    SudokuBox getBox(int x, int y) throws SudokuBoardException, SudokuContainerException {
         if (x < 0 || x >= Consts.SIZE) {
-            throw new IllegalArgumentException(Consts.COL_OUT_OF_BOUNDS + " " + x);
+            throw new ContainerOutOfBoundsException(
+                    Consts.COL_OUT_OF_BOUNDS + " " + x,
+                    new IllegalArgumentException()
+            );
         }
         if (y < 0 || y >= Consts.SIZE) {
-            throw new IllegalArgumentException(Consts.ROW_OUT_OF_BOUNDS + " " + y);
+            throw new ContainerOutOfBoundsException(
+                    Consts.ROW_OUT_OF_BOUNDS + " " + y,
+                    new IllegalArgumentException()
+            );
         }
 
         List<SudokuField> box = Arrays.asList(new SudokuField[Consts.SIZE]);

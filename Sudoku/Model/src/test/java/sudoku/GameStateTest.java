@@ -2,11 +2,13 @@ package sudoku;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import sudoku.exceptions.FieldOutOfBoundsException;
+import sudoku.exceptions.InvalidFieldValueException;
 
 class GameStateTest {
 
     @Test
-    public void GameStateConstructionTest() {
+    public void GameStateConstructionTest() throws FieldOutOfBoundsException, InvalidFieldValueException {
         GameState gameState = new GameState(Difficulty.NORMAL);
         byte zerosCount = 0;
 

@@ -2,6 +2,8 @@ package sudoku;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import sudoku.exceptions.FieldOutOfBoundsException;
+import sudoku.exceptions.InvalidFieldValueException;
 
 public class BacktrackingSudokuSolver implements SudokuSolver {
 
@@ -15,7 +17,8 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
         return list;
     }
 
-    private boolean isNumberValid(SudokuBoard board, int x, int y, int value) {
+    private boolean isNumberValid(SudokuBoard board, int x, int y, int value) throws
+            FieldOutOfBoundsException {
         for (int i = 0; i < Consts.SIZE; i++) {
             if (board.getField(i, y) == value || board.getField(x, i) == value) {
                 return false;
@@ -37,7 +40,8 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
         return true;
     }
 
-    private boolean backtrackingAlgorithm(SudokuBoard board, int x, int y) {
+    private boolean backtrackingAlgorithm(SudokuBoard board, int x, int y) throws
+            FieldOutOfBoundsException, InvalidFieldValueException {
         boolean valid = false;
 
         Collections.shuffle(values);
@@ -62,7 +66,8 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
     }
 
     @Override
-    public void solve(SudokuBoard board) {
+    public void solve(SudokuBoard board) throws
+            FieldOutOfBoundsException, InvalidFieldValueException {
         if (board.getField(0, 0) != Consts.UNINITIALIZED) {
             for (int i = 0; i < Consts.SIZE; i++) {
                 for (int j = 0; j < Consts.SIZE; j++) {

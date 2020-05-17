@@ -3,6 +3,13 @@ package sudoku;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
+import sudoku.exceptions.ContainerOutOfBoundsException;
+import sudoku.exceptions.FieldOutOfBoundsException;
+import sudoku.exceptions.InvalidContainerLengthException;
+import sudoku.exceptions.InvalidFieldValueException;
+import sudoku.exceptions.NullContainerException;
+import sudoku.exceptions.SudokuBoardException;
+import sudoku.exceptions.SudokuContainerException;
 
 class SudokuContainerTest {
     private final SudokuBoard testBoard = new SudokuBoard(new BacktrackingSudokuSolver());
@@ -10,20 +17,20 @@ class SudokuContainerTest {
     @Test
     public void constructorTest() {
         Assertions.assertThrows(
-                NullPointerException.class,
+                NullContainerException.class,
                 () -> new SudokuColumn(null));
 
         Assertions.assertThrows(
-                NullPointerException.class,
+                NullContainerException.class,
                 () -> new SudokuColumn(Arrays.asList(new SudokuField(), null, null, null, null, null, null, null, null)));
 
         Assertions.assertThrows(
-                IllegalArgumentException.class,
+                InvalidContainerLengthException.class,
                 () -> new SudokuColumn(Arrays.asList(new SudokuField[4])));
     }
 
     @Test
-    public void verifyTest() {
+    public void verifyTest() throws SudokuContainerException, SudokuBoardException, InvalidFieldValueException {
         SudokuBoard testBoard = new SudokuBoard(new BacktrackingSudokuSolver());
 
         SudokuRow row = testBoard.getRow(0);
@@ -45,7 +52,7 @@ class SudokuContainerTest {
     }
 
     @Test
-    public void equalsTest() {
+    public void equalsTest() throws SudokuContainerException, ContainerOutOfBoundsException, FieldOutOfBoundsException, InvalidFieldValueException {
         SudokuRow firstRow = testBoard.getRow(0);
         SudokuRow secondRow = testBoard.getRow(1);
         SudokuColumn column = testBoard.getColumn(0);
@@ -63,7 +70,7 @@ class SudokuContainerTest {
     }
 
     @Test
-    public void hashCodeTest() {
+    public void hashCodeTest() throws FieldOutOfBoundsException, InvalidFieldValueException, SudokuContainerException, ContainerOutOfBoundsException {
         testBoard.setField(0, 1, 5);
 
         Assertions.assertEquals(
@@ -76,7 +83,7 @@ class SudokuContainerTest {
     }
 
     @Test
-    public void toStringTest() {
+    public void toStringTest() throws SudokuContainerException, ContainerOutOfBoundsException {
         SudokuRow firstRow = testBoard.getRow(0);
         SudokuRow secondRow = testBoard.getRow(1);
         Assertions.assertEquals(firstRow.toString(), firstRow.toString());
@@ -84,7 +91,7 @@ class SudokuContainerTest {
     }
 
     @Test
-    public void cloneTest() throws CloneNotSupportedException {
+    public void cloneTest() throws CloneNotSupportedException, SudokuContainerException, ContainerOutOfBoundsException, FieldOutOfBoundsException, InvalidFieldValueException {
         SudokuRow firstRow = testBoard.getRow(0);
         SudokuRow clonedFirstRow = firstRow.clone();
 

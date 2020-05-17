@@ -8,4 +8,5 @@ module View {
 
     opens view;
     exports view;
+    exports view.exceptions;
 }

@@ -16,6 +16,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import sudoku.Difficulty;
+import view.exceptions.IOLanguageFileException;
+import view.exceptions.IllegalDifficultyException;
 
 public class MenuController implements Initializable {
 
@@ -36,7 +38,8 @@ public class MenuController implements Initializable {
         try {
             setLanguage(lang.toLowerCase());
         } catch (IOException e) {
-            e.printStackTrace();
+            Main.logger.error("Could not find language file");
+            throw new IOLanguageFileException(resourceBundle.getString("NoLangFile"), e);
         }
     };
 
@@ -48,7 +51,7 @@ public class MenuController implements Initializable {
         enLang.setOnMouseClicked(onLanguageSelect);
     }
 
-    public void startGame() throws IOException {
+    public void startGame() throws IOException, IllegalDifficultyException {
         Main.logger.info("Starting new game");
         ResourceBundle bundle = ResourceBundle.getBundle("textGame", resourceBundle.getLocale());
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game.fxml"), bundle);
@@ -62,8 +65,8 @@ public class MenuController implements Initializable {
             difficulty = Difficulty.HARD;
         } else {
             Main.logger.error("Invalid difficulty state");
-            throw new IllegalStateException(
-                    "Unexpected value: " + difficultyGroup.getSelectedToggle().toString()
+            throw new IllegalDifficultyException(
+                    bundle.getString("IllegalDifficulty") + difficultyGroup.getSelectedToggle().toString()
             );
         }
         Parent root = loader.load();

@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import sudoku.exceptions.ReadBoardException;
+import sudoku.exceptions.WriteBoardException;
 
 
 public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
@@ -16,24 +18,24 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
     }
 
     @Override
-    public SudokuBoard read() {
-        SudokuBoard sudokuBoard = null;
+    public SudokuBoard read() throws ReadBoardException {
+        SudokuBoard sudokuBoard;
         try (FileInputStream fileInputStream = new FileInputStream(fileName)) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             sudokuBoard = (SudokuBoard) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            throw new ReadBoardException("PLACEHOLDER", exception);
         }
         return sudokuBoard;
     }
 
     @Override
-    public void write(SudokuBoard obj) {
+    public void write(SudokuBoard obj) throws WriteBoardException {
         try (FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(obj);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            throw new WriteBoardException("PLACEHOLDER", exception);
         }
     }
 

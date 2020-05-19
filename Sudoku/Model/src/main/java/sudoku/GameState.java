@@ -1,20 +1,23 @@
 package sudoku;
 
-import java.util.Objects;
 import java.util.Random;
+import sudoku.exceptions.FieldOutOfBoundsException;
+import sudoku.exceptions.InvalidFieldValueException;
 
 public class GameState {
 
-    private SudokuBoard completeBoard;
-    private SudokuBoard userBoard;
+    private final SudokuBoard completeBoard;
+    private final SudokuBoard userBoard;
     private final Difficulty difficulty;
     private final String gameName;
 
-    public GameState(Difficulty difficulty) {
+    public GameState(Difficulty difficulty) throws
+            FieldOutOfBoundsException, InvalidFieldValueException {
         this(difficulty, "Generic Game");
     }
 
-    public GameState(SudokuBoard board, Difficulty difficulty, String gameName) {
+    public GameState(SudokuBoard board, Difficulty difficulty, String gameName) throws
+            FieldOutOfBoundsException, InvalidFieldValueException {
         completeBoard = board;
         userBoard = completeBoard.clone();
         this.difficulty = difficulty;
@@ -23,7 +26,8 @@ public class GameState {
         randomize();
     }
 
-    public GameState(Difficulty difficulty, String gameName) {
+    public GameState(Difficulty difficulty, String gameName) throws
+            FieldOutOfBoundsException, InvalidFieldValueException {
         completeBoard = new SudokuBoard(new BacktrackingSudokuSolver());
         completeBoard.solveGame();
 
@@ -34,7 +38,7 @@ public class GameState {
         randomize();
     }
 
-    private void randomize() {
+    private void randomize() throws FieldOutOfBoundsException, InvalidFieldValueException {
         Random random = new Random();
         int indexX = random.nextInt(9);
         int indexY = random.nextInt(9);
@@ -48,7 +52,7 @@ public class GameState {
         }
     }
 
-    public boolean compareFields(int x, int y) {
+    public boolean compareFields(int x, int y) throws FieldOutOfBoundsException {
         return completeBoard.getField(x, y) == userBoard.getField(x, y);
     }
 
@@ -56,16 +60,8 @@ public class GameState {
         return completeBoard;
     }
 
-    public void setCompleteBoard(SudokuBoard completeBoard) {
-        this.completeBoard = Objects.requireNonNull(completeBoard);
-    }
-
     public SudokuBoard getUserBoard() {
         return userBoard;
-    }
-
-    public void setUserBoard(SudokuBoard userBoard) {
-        this.userBoard = Objects.requireNonNull(userBoard);
     }
 
     public Difficulty getDifficulty() {

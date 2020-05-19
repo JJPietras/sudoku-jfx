@@ -4,6 +4,7 @@ import java.io.Serializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import sudoku.exceptions.InvalidFieldValueException;
 
 public class SudokuField implements Serializable, Cloneable, Comparable<SudokuField> {
 
@@ -13,9 +14,12 @@ public class SudokuField implements Serializable, Cloneable, Comparable<SudokuFi
         return value;
     }
 
-    public void setFieldValue(int value) {
+    public void setFieldValue(int value) throws InvalidFieldValueException {
         if (value < 0 || value > Consts.MAX_VALUE) {
-            throw new IllegalArgumentException(Consts.INVALID_VALUE);
+            throw new InvalidFieldValueException(
+                    Consts.INVALID_VALUE,
+                    new IllegalArgumentException()
+            );
         }
         this.value = value;
     }

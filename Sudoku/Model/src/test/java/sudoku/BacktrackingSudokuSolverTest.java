@@ -1,9 +1,12 @@
 package sudoku;
 
+import java.util.HashSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashSet;
+import sudoku.exceptions.FieldOutOfBoundsException;
+import sudoku.exceptions.InvalidFieldValueException;
+import sudoku.exceptions.SudokuBoardException;
+import sudoku.exceptions.SudokuContainerException;
 
 class BacktrackingSudokuSolverTest {
     private final SudokuBoard sudokuBoard = new SudokuBoard(new BacktrackingSudokuSolver());
@@ -12,7 +15,7 @@ class BacktrackingSudokuSolverTest {
 
 
     @Test
-    void solveTest() {
+    void solveTest() throws SudokuBoardException, InvalidFieldValueException, SudokuContainerException {
         sudokuBoard.solveGame();
         HashSet<Integer> set = new HashSet<>();
         for (int k = 0; k < 2; k++) {
@@ -50,7 +53,7 @@ class BacktrackingSudokuSolverTest {
     }
 
     @Test
-    void boardsDifferencesTest() {
+    void boardsDifferencesTest() throws FieldOutOfBoundsException, InvalidFieldValueException {
         boardOne.solveGame();
         boardTwo.solveGame();
         int differences = 0;

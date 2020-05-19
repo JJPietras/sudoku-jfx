@@ -1,10 +1,11 @@
 package sudoku;
 
 import java.util.List;
+import sudoku.exceptions.SudokuContainerException;
 
 public class SudokuBox extends SudokuContainer {
 
-    public SudokuBox(List<SudokuField> values) {
+    public SudokuBox(List<SudokuField> values) throws SudokuContainerException {
         super(values);
     }
 

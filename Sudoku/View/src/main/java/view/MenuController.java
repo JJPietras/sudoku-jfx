@@ -1,5 +1,9 @@
 package view;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -12,16 +16,16 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import sudoku.Difficulty;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import view.exceptions.IOLanguageFileException;
+import view.exceptions.IllegalDifficultyException;
 
 public class MenuController implements Initializable {
 
     @FXML
-    Button enLang, plLang;
+    Button enLang;
+
+    @FXML
+    Button plLang;
 
     @FXML
     private ToggleGroup difficultyGroup;
@@ -33,14 +37,11 @@ public class MenuController implements Initializable {
         String lang = ((Button) actionEvent.getSource()).getText();
         try {
             setLanguage(lang.toLowerCase());
-            System.out.println(Locale.getDefault().toString());
-
         } catch (IOException e) {
-            e.printStackTrace();
+            Main.logger.error("Could not find language file");
+            throw new IOLanguageFileException(resourceBundle.getString("NoLangFile"), e);
         }
     };
-
-
 
 
     @Override
@@ -50,7 +51,8 @@ public class MenuController implements Initializable {
         enLang.setOnMouseClicked(onLanguageSelect);
     }
 
-    public void startGame() throws IOException {
+    public void startGame() throws IOException, IllegalDifficultyException {
+        Main.logger.info("Starting new game");
         ResourceBundle bundle = ResourceBundle.getBundle("textGame", resourceBundle.getLocale());
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game.fxml"), bundle);
         Difficulty difficulty;
@@ -62,8 +64,9 @@ public class MenuController implements Initializable {
         } else if (level.equals((resourceBundle.getString("HardRadioButton")))) {
             difficulty = Difficulty.HARD;
         } else {
-            throw new IllegalStateException(
-                    "Unexpected value: " + difficultyGroup.getSelectedToggle().toString()
+            Main.logger.error("Invalid difficulty state");
+            throw new IllegalDifficultyException(
+                    bundle.getString("IllegalDifficulty") + difficultyGroup.getSelectedToggle().toString()
             );
         }
         Parent root = loader.load();
@@ -83,6 +86,7 @@ public class MenuController implements Initializable {
     }
 
     public void quitApplication() {
+        Main.logger.info("Exiting application");
         Platform.exit();
         System.exit(0);
     }

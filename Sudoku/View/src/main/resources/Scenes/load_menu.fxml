@@ -24,7 +24,7 @@
                               <Font name="System Bold Italic" size="23.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="5"/>
+                              <Insets bottom="5" />
                            </VBox.margin></Label>
                         <TextField alignment="TOP_LEFT" editable="false" prefHeight="75.0" prefWidth="250.0" promptText="%path" style="-fx-background-color: #656565; -fx-background-radius: 20; -fx-focus-traversable: false;">
                            <VBox.margin>
@@ -44,7 +44,7 @@
                            <font>
                               <Font size="16.0" />
                            </font></Button>
-                        <Button mnemonicParsing="false" text="%return">
+                        <Button onAction="#returnToGame" text="%return">
                            <font>
                               <Font size="16.0" />
                            </font></Button>

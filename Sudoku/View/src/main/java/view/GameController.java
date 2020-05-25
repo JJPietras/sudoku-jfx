@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.swing.SwingUtilities;
 import sudoku.Dao;
@@ -201,9 +202,12 @@ public class GameController implements Initializable {
         try {
             Parent root = loader.load();
             Stage stage = new Stage();
+            LoadController loadController = loader.getController();
+            loadController.startup(this);
             stage.setScene(new Scene(root));
             stage.setTitle("Menu");
-            stage.show();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
 
         } catch (IOException exception) {
             exception.printStackTrace();

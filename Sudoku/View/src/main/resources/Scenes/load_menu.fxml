@@ -79,11 +79,11 @@
                               <Insets bottom="15.0" />
                            </VBox.margin>
                         </HBox>
-                        <ListView prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #656565;">
+                        <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #656565;">
                            <VBox.margin>
                               <Insets left="10.0" right="15.0" />
                            </VBox.margin></ListView>
-                        <Button mnemonicParsing="false" text="%display">
+                        <Button mnemonicParsing="false" onAction="#displayDatabaseEntries" text="%display">
                            <VBox.margin>
                               <Insets bottom="5.0" top="10.0" />
                            </VBox.margin>

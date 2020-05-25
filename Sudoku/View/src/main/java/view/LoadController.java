@@ -2,14 +2,20 @@ package view;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import jpa.Board;
+import jpa.DatabaseManager;
 import sudoku.Dao;
 import sudoku.SudokuBoard;
 import sudoku.SudokuBoardDaoFactory;
@@ -20,6 +26,9 @@ public class LoadController implements Initializable {
 
     @FXML
     private TextField pathTextField;
+
+    @FXML
+    private ListView<String> listView;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -60,6 +69,18 @@ public class LoadController implements Initializable {
         } else {
             pathTextField.setText("PLACEHOLDER");
         }
+    }
+
+    @FXML
+    private void displayDatabaseEntries() {
+        DatabaseManager databaseManager = new DatabaseManager();
+        /*List<Board> boards = databaseManager.getAllEntries();
+        ObservableList<String> results = FXCollections.emptyObservableList();
+
+        for (Board board : boards) {
+            results.add(board.getId().toString() + " " + board.getName());
+        }
+        listView.setItems(results);*/
     }
 
     @FXML

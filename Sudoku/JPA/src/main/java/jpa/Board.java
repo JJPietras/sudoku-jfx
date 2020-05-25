@@ -18,7 +18,7 @@ import sudoku.SudokuBoard;
 
 @Entity
 @Table(name = "board")
-class Board {
+public class Board {
     @Id
     @GeneratedValue
     private Long id;
@@ -56,6 +56,14 @@ class Board {
             exception.printStackTrace();
         }
         return sudokuBoard;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public byte[] getBoard() {

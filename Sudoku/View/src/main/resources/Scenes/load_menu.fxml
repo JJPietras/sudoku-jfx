@@ -26,18 +26,18 @@
                            <VBox.margin>
                               <Insets bottom="5" />
                            </VBox.margin></Label>
-                        <TextField alignment="TOP_LEFT" editable="false" prefHeight="75.0" prefWidth="250.0" promptText="%path" style="-fx-background-color: #656565; -fx-background-radius: 20; -fx-focus-traversable: false;">
+                        <TextField fx:id="pathTextField" alignment="TOP_LEFT" prefHeight="75.0" prefWidth="250.0" promptText="%path" style="-fx-background-color: #656565; -fx-background-radius: 20; -fx-focus-traversable: false;">
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" />
                            </VBox.margin></TextField>
-                        <Button mnemonicParsing="false" text="%board_file">
+                        <Button mnemonicParsing="false" onAction="#selectBoardFile" text="%board_file">
                            <VBox.margin>
                               <Insets bottom="5.0" />
                            </VBox.margin>
                            <font>
                               <Font size="16.0" />
                            </font></Button>
-                        <Button mnemonicParsing="false" text="%file_load">
+                        <Button mnemonicParsing="false" onAction="#loadBoardFromFile" text="%file_load">
                            <VBox.margin>
                               <Insets bottom="47.0" />
                            </VBox.margin>

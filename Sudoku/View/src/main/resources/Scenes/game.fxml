@@ -617,7 +617,7 @@
                   <Font size="22.0" />
                </font>
             </Button>
-            <Button fx:id="loadBoardBt" mnemonicParsing="false" onAction="#loadBoard" prefWidth="190.0" text="%LoadBoardButton">
+            <Button fx:id="loadBoardBt" mnemonicParsing="false" onAction="#openLoadBoardMenu" prefWidth="190.0" text="%LoadBoardButton">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>

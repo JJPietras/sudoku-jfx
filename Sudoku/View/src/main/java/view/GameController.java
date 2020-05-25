@@ -62,14 +62,6 @@ public class GameController implements Initializable {
         authorsDisplay();
     }
 
-    public void quitGameMode() throws IOException {
-        ResourceBundle bundle = ResourceBundle.getBundle("textMenu", resourceBundle.getLocale());
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Scenes/main_menu.fxml"), bundle);
-        Parent root = loader.load();
-        Main.stage.setScene(new Scene(root));
-        Main.logger.info("Game closed");
-    }
-
     public void startup(Difficulty difficulty) {
         Main.logger.info("Created new game, difficulty: " + difficulty.toString());
         try {
@@ -84,7 +76,29 @@ public class GameController implements Initializable {
         timerDisplay();
     }
 
-    private void displayGame() {
+    void updateGameState(SudokuBoard sudokuBoard) {
+        try {
+            this.gameState = new GameState(
+                    sudokuBoard,
+                    gameState.getDifficulty(),
+                    gameState.getGameName()
+            );
+        } catch (FieldOutOfBoundsException | InvalidFieldValueException exception) {
+            Main.logger.error("Error creating new GameState - invalid parameters");
+            exception.printStackTrace();
+        }
+    }
+
+    public void quitGameMode() throws IOException {
+        ResourceBundle bundle = ResourceBundle.getBundle("textMenu", resourceBundle.getLocale());
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Scenes/main_menu.fxml"), bundle);
+        Parent root = loader.load();
+        Main.stage.setScene(new Scene(root));
+        Main.logger.info("Game closed");
+    }
+
+    void displayGame() {
+        resetStyle();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 try {
@@ -193,9 +207,7 @@ public class GameController implements Initializable {
         }
     }
 
-    public void loadBoard() {
-        resetStyle();
-
+    public void openLoadBoardMenu() {
         ResourceBundle bundle = ResourceBundle.getBundle("textLoad", resourceBundle.getLocale());
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Scenes/load_menu.fxml"), bundle);
 
@@ -212,29 +224,6 @@ public class GameController implements Initializable {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-
-
-        /*FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(Main.stage);
-        if (file != null) {
-            Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(file.getAbsolutePath());
-            SudokuBoard board = null;
-            try {
-                board = fileSudokuBoardDao.read();
-            } catch (ReadBoardException e) {
-                Main.logger.error("Could not read selected file");
-                e.printStackTrace();
-            }
-            try {
-                gameState = new GameState(board, gameState.getDifficulty(), gameState.getGameName());
-            } catch (FieldOutOfBoundsException | InvalidFieldValueException e) {
-                Main.logger.error("Error creating new GameState - invalid parameters");
-                e.printStackTrace();
-            }
-            displayGame();
-        } else {
-            Main.logger.error("Wrong file or none selected");
-        }*/
     }
 
     private TextField getField(int x, int y) {

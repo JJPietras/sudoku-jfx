@@ -30,12 +30,12 @@ public class Main extends Application {
             resourceBundle = ResourceBundle.getBundle("textMenu", locale);
             Parent root = FXMLLoader.load(
                     Objects.requireNonNull(
-                            getClass().getClassLoader().getResource("main_menu.fxml")),
+                            getClass().getClassLoader().getResource("Scenes/main_menu.fxml")),
                     resourceBundle
             );
             primaryStage.setTitle("Sudoku");
             primaryStage.setScene(new Scene(root));
-            primaryStage.getScene().getStylesheets().add("main_menu_style.css");
+            primaryStage.getScene().getStylesheets().add("Styles/main_menu_style.css");
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();

@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javax.swing.SwingUtilities;
 import sudoku.Dao;
 import sudoku.Difficulty;
@@ -62,7 +63,7 @@ public class GameController implements Initializable {
 
     public void quitGameMode() throws IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("textMenu", resourceBundle.getLocale());
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main_menu.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Scenes/main_menu.fxml"), bundle);
         Parent root = loader.load();
         Main.stage.setScene(new Scene(root));
         Main.logger.info("Game closed");
@@ -193,7 +194,23 @@ public class GameController implements Initializable {
 
     public void loadBoard() {
         resetStyle();
-        FileChooser fileChooser = new FileChooser();
+
+        ResourceBundle bundle = ResourceBundle.getBundle("textLoad", resourceBundle.getLocale());
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Scenes/load_menu.fxml"), bundle);
+
+        try {
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Menu");
+            stage.show();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+
+        /*FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(Main.stage);
         if (file != null) {
             Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(file.getAbsolutePath());
@@ -213,7 +230,7 @@ public class GameController implements Initializable {
             displayGame();
         } else {
             Main.logger.error("Wrong file or none selected");
-        }
+        }*/
     }
 
     private TextField getField(int x, int y) {

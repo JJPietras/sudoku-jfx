@@ -10,6 +10,7 @@ import sudoku.exceptions.InvalidFieldValueException;
 import sudoku.exceptions.NullContainerException;
 import sudoku.exceptions.SudokuBoardException;
 import sudoku.exceptions.SudokuContainerException;
+import sudoku.gamestate.BoardType;
 import sudoku.solver.BacktrackingSudokuSolver;
 
 class SudokuContainerTest {
@@ -64,15 +65,15 @@ class SudokuContainerTest {
 
         Assertions.assertEquals(firstRow, secondRow);
 
-        testBoard.setField(0, 0, 2);
+        testBoard.setField(0, 0, 2, BoardType.ORIGINAL);
         Assertions.assertNotEquals(firstRow, secondRow);
-        testBoard.setField(0, 1, 2);
+        testBoard.setField(0, 1, 2, BoardType.ORIGINAL);
         Assertions.assertEquals(firstRow, secondRow);
     }
 
     @Test
     public void hashCodeTest() throws FieldOutOfBoundsException, InvalidFieldValueException, SudokuContainerException, ContainerOutOfBoundsException {
-        testBoard.setField(0, 1, 5);
+        testBoard.setField(0, 1, 5, BoardType.ORIGINAL);
 
         Assertions.assertEquals(
                 testBoard.getRow(0).hashCode(),
@@ -96,16 +97,16 @@ class SudokuContainerTest {
         SudokuRow firstRow = testBoard.getRow(0);
         SudokuRow clonedFirstRow = firstRow.clone();
 
-        int firstFieldValue = testBoard.getField(0, 0);
-        int secondFieldValue = testBoard.getField(1, 0);
+        int firstFieldValue = testBoard.getField(0, 0, BoardType.ORIGINAL);
+        int secondFieldValue = testBoard.getField(1, 0, BoardType.ORIGINAL);
 
-        testBoard.setField(0, 0, 1);
-        testBoard.setField(1, 0, 1);
+        testBoard.setField(0, 0, 1, BoardType.ORIGINAL);
+        testBoard.setField(1, 0, 1, BoardType.ORIGINAL);
 
         Assertions.assertEquals(firstRow.verify(), clonedFirstRow.verify());
 
-        testBoard.setField(0, 0, firstFieldValue);
-        testBoard.setField(1, 0, secondFieldValue);
+        testBoard.setField(0, 0, firstFieldValue, BoardType.ORIGINAL);
+        testBoard.setField(1, 0, secondFieldValue, BoardType.ORIGINAL);
 
         Assertions.assertEquals(firstRow.verify(), clonedFirstRow.verify());
     }

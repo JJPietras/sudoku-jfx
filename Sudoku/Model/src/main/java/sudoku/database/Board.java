@@ -26,6 +26,9 @@ public class Board {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "difficulty")
+    private String difficulty;
+
     @Lob
     @Column(name = "board")
     private byte[] board;
@@ -35,6 +38,7 @@ public class Board {
 
     public Board(SudokuBoard sudokuBoard, String name) {
         this.name = name;
+        this.difficulty = sudokuBoard.getDifficulty().name();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
@@ -64,6 +68,10 @@ public class Board {
 
     public String getName() {
         return name;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 
     public byte[] getBoard() {

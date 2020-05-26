@@ -14,12 +14,12 @@ class GameStateTest {
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (gameState.getUserBoard().getField(i, j) == 0) {
+                if (gameState.getBoard().getField(i, j, BoardType.USER) == 0) {
                     zerosCount++;
                 }
             }
         }
-        Assertions.assertEquals(zerosCount, Difficulty.NORMAL.getValue());
+        Assertions.assertEquals(Difficulty.NORMAL.getValue(), zerosCount);
     }
 
 }

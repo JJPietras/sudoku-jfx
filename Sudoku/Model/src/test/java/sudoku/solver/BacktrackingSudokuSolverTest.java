@@ -7,6 +7,7 @@ import sudoku.exceptions.FieldOutOfBoundsException;
 import sudoku.exceptions.InvalidFieldValueException;
 import sudoku.exceptions.SudokuBoardException;
 import sudoku.exceptions.SudokuContainerException;
+import sudoku.gamestate.BoardType;
 import sudoku.model.SudokuBoard;
 
 class BacktrackingSudokuSolverTest {
@@ -23,8 +24,8 @@ class BacktrackingSudokuSolverTest {
             boolean row = k == 0;
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
-                    Assertions.assertFalse(set.contains(sudokuBoard.getField(row ? j : i, row ? i : j)));
-                    set.add(sudokuBoard.getField(row ? j : i, row ? i : j));
+                    Assertions.assertFalse(set.contains(sudokuBoard.getField(row ? j : i, row ? i : j, BoardType.ORIGINAL)));
+                    set.add(sudokuBoard.getField(row ? j : i, row ? i : j, BoardType.ORIGINAL));
                 }
                 set.clear();
             }
@@ -33,7 +34,7 @@ class BacktrackingSudokuSolverTest {
             for (int i = (k * 3); i < 3 * (k + 1); i++) {
                 for (int l = 0; l < 3; l++) {
                     for (int j = (l * 3); j < 3 * (l + 1); j++) {
-                        set.add(sudokuBoard.getField(j, i));
+                        set.add(sudokuBoard.getField(j, i, BoardType.ORIGINAL));
                     }
                 }
                 Assertions.assertEquals(9, set.size());
@@ -61,7 +62,7 @@ class BacktrackingSudokuSolverTest {
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (boardOne.getField(j, i) != boardTwo.getField(j, i)) {
+                if (boardOne.getField(j, i, BoardType.ORIGINAL) != boardTwo.getField(j, i, BoardType.ORIGINAL)) {
                     differences++;
                 }
             }

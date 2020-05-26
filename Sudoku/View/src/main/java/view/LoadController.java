@@ -85,6 +85,20 @@ public class LoadController implements Initializable {
     }
 
     @FXML
+    private void loadSelected() {
+        String selection = listView.getSelectionModel().getSelectedItem();
+        if (selection != null) {
+            selection = selection.substring(0, selection.indexOf(' '));
+            if (!idField.getText().equals(selection)) {
+                idField.setText(selection);
+            } else {
+                loadBoardById();
+                idField.setText("");
+            }
+        }
+    }
+
+    @FXML
     private void loadBoardById() {
         DatabaseManager databaseManager = new DatabaseManager();
 
@@ -134,7 +148,7 @@ public class LoadController implements Initializable {
         ObservableList<String> results = FXCollections.observableArrayList();
 
         for (Board board : boards) {
-            results.add(board.getId().toString() + " " + board.getName());
+            results.add(board.getId().toString() + " " + board.getName() + " " + board.getDifficulty());
         }
         listView.setItems(results);
 

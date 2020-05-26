@@ -18,12 +18,18 @@ import sudoku.exceptions.FieldOutOfBoundsException;
 import sudoku.exceptions.InvalidFieldValueException;
 import sudoku.exceptions.SudokuBoardException;
 import sudoku.exceptions.SudokuContainerException;
+import sudoku.gamestate.BoardType;
+import sudoku.gamestate.CoordinatesWrapper;
+import sudoku.gamestate.Difficulty;
 import sudoku.solver.SudokuSolver;
 
 public class SudokuBoard implements Serializable, Cloneable {
 
     private final SudokuSolver sudokuSolver;
     private final List<List<SudokuField>> board;
+    private List<List<SudokuField>> userBoard;
+    private List<CoordinatesWrapper<Integer>> initialValues;
+    private Difficulty difficulty;
 
     public SudokuBoard(SudokuSolver solver) {
         @SuppressWarnings("unchecked")
@@ -40,21 +46,44 @@ public class SudokuBoard implements Serializable, Cloneable {
         sudokuSolver = Objects.requireNonNull(solver);
     }
 
+    public SudokuBoard(SudokuSolver solver, Difficulty difficulty) {
+        this(solver);
+        this.difficulty = difficulty;
+        prepare();
+    }
+
+    public void prepare() {
+        try {
+            solveGame();
+
+        } catch (FieldOutOfBoundsException | InvalidFieldValueException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void solveGame() throws FieldOutOfBoundsException, InvalidFieldValueException {
         sudokuSolver.solve(this);
     }
 
-    public int getField(int x, int y) throws FieldOutOfBoundsException {
+    public List<CoordinatesWrapper<Integer>> getInitialValues() {
+        return initialValues;
+    }
+
+    public int getField(int x, int y, BoardType boardType) throws FieldOutOfBoundsException {
         if (x < 0 || y < 0 || x >= Consts.SIZE || y >= Consts.SIZE) {
             throw new FieldOutOfBoundsException(
                     Consts.OUT_OF_BOUNDS,
                     new ArrayIndexOutOfBoundsException()
             );
         }
-        return board.get(y).get(x).getFieldValue();
+        if (boardType == BoardType.ORIGINAL) {
+            return board.get(y).get(x).getFieldValue();
+        } else {
+            return userBoard.get(y).get(x).getFieldValue();
+        }
     }
 
-    public void setField(int x, int y, int value) throws
+    public void setField(int x, int y, int value, BoardType boardType) throws
             FieldOutOfBoundsException, InvalidFieldValueException {
         if (x < 0 || y < 0 || x >= Consts.SIZE || y >= Consts.SIZE) {
             throw new FieldOutOfBoundsException(
@@ -62,7 +91,11 @@ public class SudokuBoard implements Serializable, Cloneable {
                     new ArrayIndexOutOfBoundsException()
             );
         }
-        board.get(y).get(x).setFieldValue(value);
+        if (boardType == BoardType.ORIGINAL) {
+            board.get(y).get(x).setFieldValue(value);
+        } else {
+            userBoard.get(y).get(x).setFieldValue(value);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -134,6 +167,18 @@ public class SudokuBoard implements Serializable, Cloneable {
         return new SudokuBox(box);
     }
 
+    public void setInitialValues(List<CoordinatesWrapper<Integer>> initialValues) {
+        this.initialValues = Objects.requireNonNull(initialValues);
+    }
+
+    public void setUserBoard(List<List<SudokuField>> userBoard) {
+        this.userBoard = Objects.requireNonNull(userBoard);
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) {
@@ -187,5 +232,9 @@ public class SudokuBoard implements Serializable, Cloneable {
             return null;
         }
 
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 }

@@ -51,7 +51,7 @@ public class SaveController implements Initializable {
         if (file != null) {
             Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(file.getAbsolutePath());
             try {
-                fileSudokuBoardDao.write(gameController.getGameState().getCompleteBoard());
+                fileSudokuBoardDao.write(gameController.getGameState().getBoard());
                 status.setText(resourceBundle.getString("saved_file"));
             } catch (WriteBoardException e) {
                 Main.logger.error("Could not save board to selected file");
@@ -68,7 +68,7 @@ public class SaveController implements Initializable {
         ObservableList<String> results = FXCollections.observableArrayList();
 
         for (Board board : boards) {
-            results.add(board.getId().toString() + " " + board.getName());
+            results.add(board.getId().toString() + " " + board.getName() + " " + board.getDifficulty());
         }
         listView.setItems(results);
 
@@ -104,7 +104,7 @@ public class SaveController implements Initializable {
                 Dao<SudokuBoard> sudokuBoardDao = new SudokuBoardDaoFactory().getJpaDao(name.getText());
 
                 try {
-                    sudokuBoardDao.write(gameController.getGameState().getCompleteBoard());
+                    sudokuBoardDao.write(gameController.getGameState().getBoard());
                     displayDatabaseEntries();
                     status.setText(resourceBundle.getString("saved_database"));
                 } catch (WriteBoardException exception) {

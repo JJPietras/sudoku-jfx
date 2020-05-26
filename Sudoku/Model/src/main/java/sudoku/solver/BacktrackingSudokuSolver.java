@@ -5,6 +5,7 @@ import java.util.Collections;
 import sudoku.consts.Consts;
 import sudoku.exceptions.FieldOutOfBoundsException;
 import sudoku.exceptions.InvalidFieldValueException;
+import sudoku.gamestate.BoardType;
 import sudoku.model.SudokuBoard;
 
 public class BacktrackingSudokuSolver implements SudokuSolver {
@@ -22,7 +23,8 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
     private boolean isNumberValid(SudokuBoard board, int x, int y, int value) throws
             FieldOutOfBoundsException {
         for (int i = 0; i < Consts.SIZE; i++) {
-            if (board.getField(i, y) == value || board.getField(x, i) == value) {
+            if (board.getField(i, y, BoardType.ORIGINAL) == value
+                    || board.getField(x, i, BoardType.ORIGINAL) == value) {
                 return false;
             }
         }
@@ -33,7 +35,7 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
 
         for (int i = sectionFirstRow; i < sectionFirstRow + sectionSize; i++) {
             for (int j = sectionFirstCol; j < sectionFirstCol + sectionSize; j++) {
-                if (board.getField(i, j) == value) {
+                if (board.getField(i, j, BoardType.ORIGINAL) == value) {
                     return false;
                 }
             }
@@ -49,7 +51,7 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
         Collections.shuffle(values);
         for (int i = 0; i < values.size() && !valid; i++) {
             if (isNumberValid(board, x, y, values.get(i))) {
-                board.setField(x, y, values.get(i));
+                board.setField(x, y, values.get(i), BoardType.ORIGINAL);
                 if (x == Consts.SIZE - 1) {
                     if (y == Consts.SIZE - 1) {
                         return true;
@@ -61,7 +63,7 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
             }
         }
         if (!valid) {
-            board.setField(x, y, Consts.UNINITIALIZED);
+            board.setField(x, y, Consts.UNINITIALIZED, BoardType.ORIGINAL);
             return false;
         }
         return true;
@@ -70,10 +72,10 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
     @Override
     public void solve(SudokuBoard board) throws
             FieldOutOfBoundsException, InvalidFieldValueException {
-        if (board.getField(0, 0) != Consts.UNINITIALIZED) {
+        if (board.getField(0, 0, BoardType.ORIGINAL) != Consts.UNINITIALIZED) {
             for (int i = 0; i < Consts.SIZE; i++) {
                 for (int j = 0; j < Consts.SIZE; j++) {
-                    board.setField(j, i, Consts.UNINITIALIZED);
+                    board.setField(j, i, Consts.UNINITIALIZED, BoardType.ORIGINAL);
                 }
             }
         }

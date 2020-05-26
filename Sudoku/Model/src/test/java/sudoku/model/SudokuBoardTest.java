@@ -8,6 +8,7 @@ import sudoku.exceptions.FieldOutOfBoundsException;
 import sudoku.exceptions.InvalidFieldValueException;
 import sudoku.exceptions.SudokuBoardException;
 import sudoku.exceptions.SudokuContainerException;
+import sudoku.gamestate.BoardType;
 import sudoku.solver.BacktrackingSudokuSolver;
 
 class SudokuBoardTest {
@@ -18,23 +19,23 @@ class SudokuBoardTest {
     public void getFieldTest() throws FieldOutOfBoundsException {
         Assertions.assertThrows(
                 FieldOutOfBoundsException.class,
-                () -> sudokuBoard.getField(-1, 4));
+                () -> sudokuBoard.getField(-1, 4, BoardType.ORIGINAL));
 
-        Assertions.assertEquals(sudokuBoard.getField(0, 0), 0);
+        Assertions.assertEquals(sudokuBoard.getField(0, 0, BoardType.ORIGINAL), 0);
     }
 
     @Test
     public void setFieldTest() throws FieldOutOfBoundsException, InvalidFieldValueException {
         Assertions.assertThrows(
                 FieldOutOfBoundsException.class,
-                () -> sudokuBoard.setField(-1, 4, 1));
+                () -> sudokuBoard.setField(-1, 4, 1, BoardType.ORIGINAL));
 
         Assertions.assertThrows(
                 InvalidFieldValueException.class,
-                () -> sudokuBoard.setField(1, 4, -1));
+                () -> sudokuBoard.setField(1, 4, -1, BoardType.ORIGINAL));
 
-        sudokuBoard.setField(0, 0, 1);
-        Assertions.assertEquals(sudokuBoard.getField(0, 0), 1);
+        sudokuBoard.setField(0, 0, 1, BoardType.ORIGINAL);
+        Assertions.assertEquals(sudokuBoard.getField(0, 0, BoardType.ORIGINAL), 1);
     }
 
     @Test
@@ -98,7 +99,7 @@ class SudokuBoardTest {
         Assertions.assertNotEquals(sudokuBoard, new SudokuField());
         Assertions.assertEquals(sudokuBoard, sudokuBoard);
 
-        sudokuBoard.setField(0, 0, 2);
+        sudokuBoard.setField(0, 0, 2, BoardType.ORIGINAL);
         SudokuBoard newSudokuBoard = sudokuBoard;
         Assertions.assertEquals(sudokuBoard, newSudokuBoard);
 
@@ -107,8 +108,8 @@ class SudokuBoardTest {
 
         for (int i = 0; i < Consts.SIZE; i++) {
             for (int j = 0; j < Consts.SIZE; j++) {
-                sudokuBoard.setField(i, j, 1);
-                newSudokuBoard.setField(i, j, 1);
+                sudokuBoard.setField(i, j, 1, BoardType.ORIGINAL);
+                newSudokuBoard.setField(i, j, 1, BoardType.ORIGINAL);
             }
         }
         Assertions.assertEquals(sudokuBoard, newSudokuBoard);
@@ -119,14 +120,15 @@ class SudokuBoardTest {
         SudokuBoard newSudokuBoard = new SudokuBoard(new BacktrackingSudokuSolver());
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                newSudokuBoard.setField(i, j, sudokuBoard.getField(i, j));
+                newSudokuBoard.setField(i, j, sudokuBoard.getField(i, j, BoardType.ORIGINAL),
+                        BoardType.ORIGINAL);
             }
         }
 
         Assertions.assertEquals(sudokuBoard.hashCode(), newSudokuBoard.hashCode());
 
-        newSudokuBoard.setField(0, 0, 9);
-        newSudokuBoard.setField(1, 0, 9);
+        newSudokuBoard.setField(0, 0, 9, BoardType.ORIGINAL);
+        newSudokuBoard.setField(1, 0, 9, BoardType.ORIGINAL);
         Assertions.assertNotEquals(sudokuBoard.hashCode(), newSudokuBoard.hashCode());
     }
 
@@ -146,18 +148,18 @@ class SudokuBoardTest {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 Assertions.assertEquals(
-                        sudokuBoard.getField(i, j),
-                        clonedSudokuBoard.getField(i, j)
+                        sudokuBoard.getField(i, j, BoardType.ORIGINAL),
+                        clonedSudokuBoard.getField(i, j, BoardType.ORIGINAL)
                 );
             }
         }
 
-        sudokuBoard.setField(0, 0, 3);
-        clonedSudokuBoard.setField(0, 0, 4);
+        sudokuBoard.setField(0, 0, 3, BoardType.ORIGINAL);
+        clonedSudokuBoard.setField(0, 0, 4, BoardType.ORIGINAL);
 
         Assertions.assertNotEquals(
-                sudokuBoard.getField(0, 0),
-                clonedSudokuBoard.getField(0, 0)
+                sudokuBoard.getField(0, 0, BoardType.ORIGINAL),
+                clonedSudokuBoard.getField(0, 0, BoardType.ORIGINAL)
         );
     }
 }

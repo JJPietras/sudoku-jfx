@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import javax.swing.SwingUtilities;
 import sudoku.exceptions.FieldOutOfBoundsException;
 import sudoku.exceptions.InvalidFieldValueException;
+import sudoku.gamestate.BoardType;
 import sudoku.gamestate.Difficulty;
 import sudoku.gamestate.GameState;
 import sudoku.model.SudokuBoard;
@@ -65,6 +66,7 @@ public class GameController implements Initializable {
             e.printStackTrace();
         }
         resetGUI(difficulty);
+        timerDisplay();
     }
 
     private void resetGUI(Difficulty difficulty) {
@@ -72,7 +74,12 @@ public class GameController implements Initializable {
         resetStyle();
         this.difficulty.setText(resourceBundle.getString("DifficultyLabel").concat(difficulty.name()));
         gameName.setText(resourceBundle.getString("GameNameLabel").concat(gameState.getGameName()));
-        timerDisplay();
+    }
+
+    @FXML
+    private void resetGame() {
+        gameState.reset();
+        resetGUI(gameState.getDifficulty());
     }
 
     GameState getGameState() {
@@ -80,18 +87,9 @@ public class GameController implements Initializable {
     }
 
     void updateGameState(SudokuBoard sudokuBoard, String name) {
-        try {
-            this.gameState = new GameState(
-                    sudokuBoard,
-                    gameState.getDifficulty(),
-                    name
-            );
-            i = 0;
-            resetGUI(gameState.getDifficulty());
-        } catch (FieldOutOfBoundsException | InvalidFieldValueException exception) {
-            Main.logger.error("Error creating new GameState - invalid parameters");
-            exception.printStackTrace();
-        }
+        this.gameState = new GameState(sudokuBoard, name);
+        i = 0;
+        resetGUI(gameState.getDifficulty());
     }
 
     public void quitGameMode() throws IOException {
@@ -106,7 +104,7 @@ public class GameController implements Initializable {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 try {
-                    setFieldValue(j, i, String.valueOf(gameState.getUserBoard().getField(j, i)));
+                    setFieldValue(j, i, String.valueOf(gameState.getBoard().getField(j, i, BoardType.USER)));
                 } catch (FieldOutOfBoundsException e) {
                     Main.logger.error("Field indexes are wrong");
                     e.printStackTrace();
@@ -124,6 +122,7 @@ public class GameController implements Initializable {
     }
 
     public void newGame() {
+        resetStyle();
         try {
             gameState = new GameState(gameState.getDifficulty(), "Sudoku");
         } catch (FieldOutOfBoundsException | InvalidFieldValueException e) {
@@ -150,7 +149,7 @@ public class GameController implements Initializable {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (!getField(j, i).getText().equals("")) {
-                    gameState.getUserBoard().setField(j, i, Integer.parseInt(getField(j, i).getText()));
+                    gameState.getBoard().setField(j, i, Integer.parseInt(getField(j, i).getText()), BoardType.USER);
                 }
                 getField(j, i).setStyle("-fx-text-fill: black;");
                 if (!getField(j, i).getText().equals("") && !gameState.compareFields(j, i)) {
@@ -161,11 +160,11 @@ public class GameController implements Initializable {
     }
 
     public void solve() throws FieldOutOfBoundsException {
-        SudokuBoard board = gameState.getCompleteBoard();
+        SudokuBoard board = gameState.getBoard();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 getField(j, i).setStyle("-fx-text-fill: black;");
-                getField(j, i).setText(Integer.toString(board.getField(j, i)));
+                getField(j, i).setText(Integer.toString(board.getField(j, i, BoardType.ORIGINAL)));
             }
         }
         Main.logger.info("Performed solve operation");

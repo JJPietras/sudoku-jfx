@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +37,7 @@ public class Main extends Application {
             primaryStage.setTitle("Sudoku");
             primaryStage.setScene(new Scene(root));
             primaryStage.getScene().getStylesheets().add("Styles/main_menu_style.css");
+            primaryStage.setOnCloseRequest((WindowEvent we) -> System.exit(0));
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();

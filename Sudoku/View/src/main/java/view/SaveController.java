@@ -14,18 +14,18 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sudoku.dao.Dao;
+import sudoku.dao.SudokuBoardDaoFactory;
 import sudoku.database.Board;
 import sudoku.database.DatabaseManager;
-import sudoku.dao.Dao;
+import sudoku.exceptions.WriteBoardException;
 import sudoku.model.SudokuBoard;
-import sudoku.dao.SudokuBoardDaoFactory;
-import sudoku.exceptions.ReadBoardException;
 
-public class LoadController implements Initializable {
+public class SaveController implements Initializable {
     private GameController gameController;
 
     @FXML
-    private TextField pathTextField;
+    private TextField name;
 
     @FXML
     private TextField status;
@@ -45,36 +45,18 @@ public class LoadController implements Initializable {
     }
 
     @FXML
-    private void selectBoardFile() {
+    private void saveBoardToFile() {
         FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(Main.stage);
+        File file = fileChooser.showSaveDialog(Main.stage);
         if (file != null) {
-            pathTextField.setText(file.getAbsolutePath());
-            status.setText(resourceBundle.getString("file_selected"));
-        } else {
-            Main.logger.error("Wrong file or none selected");
-        }
-    }
-
-    @FXML
-    private void loadBoardFromFile() {
-        File file = new File(pathTextField.getText());
-        if (file.exists()) {
-            String path = pathTextField.getText();
-            Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(path);
-            SudokuBoard board = null;
+            Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(file.getAbsolutePath());
             try {
-                board = fileSudokuBoardDao.read();
-                status.setText(resourceBundle.getString("board_file_loaded"));
-            } catch (ReadBoardException exception) {
-                Main.logger.error("Could not read selected file");
-                exception.printStackTrace();
+                fileSudokuBoardDao.write(gameController.getGameState().getCompleteBoard());
+                status.setText(resourceBundle.getString("saved_file"));
+            } catch (WriteBoardException e) {
+                Main.logger.error("Could not save board to selected file");
+                e.printStackTrace();
             }
-            gameController.updateGameState(board);
-            gameController.displayGame();
-
-        } else {
-            status.setText(resourceBundle.getString("board_file_failed"));
         }
     }
 
@@ -94,6 +76,37 @@ public class LoadController implements Initializable {
             status.setText(resourceBundle.getString("no_results"));
         } else {
             status.setText(resourceBundle.getString("finished"));
+        }
+    }
+
+    @FXML
+    private void deleteAllRecords() {
+        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.removeAll();
+        databaseManager.releaseResources();
+        displayDatabaseEntries();
+    }
+
+    @FXML
+    private void deleteNamedRecord() {
+        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.removeData(name.getText());
+        databaseManager.releaseResources();
+        displayDatabaseEntries();
+    }
+
+    @FXML
+    private void saveToDatabase() {
+        if (!name.getText().equals("")) {
+            Dao<SudokuBoard> sudokuBoardDao = new SudokuBoardDaoFactory().getJpaDao(name.getText());
+
+            try {
+                sudokuBoardDao.write(gameController.getGameState().getCompleteBoard());
+                displayDatabaseEntries();
+                status.setText(resourceBundle.getString("saved_database"));
+            } catch (WriteBoardException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 

@@ -15,7 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
-import sudoku.Difficulty;
+import sudoku.gamestate.Difficulty;
 import view.exceptions.IOLanguageFileException;
 import view.exceptions.IllegalDifficultyException;
 

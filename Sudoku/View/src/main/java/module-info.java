@@ -1,5 +1,4 @@
 module View {
-    requires JPA;
     requires Model;
     requires java.sql;
     requires java.desktop;

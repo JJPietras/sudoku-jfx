@@ -1,6 +1,5 @@
 package view;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
@@ -18,19 +17,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.swing.SwingUtilities;
-import sudoku.Dao;
-import sudoku.Difficulty;
-import sudoku.GameState;
-import sudoku.SudokuBoard;
-import sudoku.SudokuBoardDaoFactory;
 import sudoku.exceptions.FieldOutOfBoundsException;
 import sudoku.exceptions.InvalidFieldValueException;
-import sudoku.exceptions.ReadBoardException;
-import sudoku.exceptions.WriteBoardException;
+import sudoku.gamestate.Difficulty;
+import sudoku.gamestate.GameState;
+import sudoku.model.SudokuBoard;
 
 public class GameController implements Initializable {
 
@@ -76,6 +70,10 @@ public class GameController implements Initializable {
         timerDisplay();
     }
 
+    GameState getGameState() {
+        return gameState;
+    }
+
     void updateGameState(SudokuBoard sudokuBoard) {
         try {
             this.gameState = new GameState(
@@ -114,7 +112,6 @@ public class GameController implements Initializable {
     private void addCheckingToFields() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                getField(j, i).setOnKeyReleased(this::checkInputText);
                 setFieldValidator(j, i, onFieldInput);
             }
         }
@@ -142,22 +139,6 @@ public class GameController implements Initializable {
             }
         }
     };
-
-    @FXML
-    private void checkInputText(KeyEvent event) {
-        TextField textField = (TextField) event.getSource();
-        String value = textField.getText();
-        textField.setStyle("-fx-text-fill: black;");
-        if (value.length() == 1) {
-            try {
-                Integer.parseInt(value);
-            } catch (NumberFormatException exception) {
-                textField.setText("");
-            }
-        } else {
-            textField.setText("");
-        }
-    }
 
     public void verify() throws FieldOutOfBoundsException, InvalidFieldValueException {
         for (int i = 0; i < 9; i++) {
@@ -192,18 +173,22 @@ public class GameController implements Initializable {
         }
     }
 
-    public void saveBoard() {
-        SudokuBoard sudokuBoard = gameState.getCompleteBoard();
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showSaveDialog(Main.stage);
-        if (file != null) {
-            Dao<SudokuBoard> fileSudokuBoardDao = new SudokuBoardDaoFactory().getFileDao(file.getAbsolutePath());
-            try {
-                fileSudokuBoardDao.write(sudokuBoard);
-            } catch (WriteBoardException e) {
-                Main.logger.error("Could not save board to selected file");
-                e.printStackTrace();
-            }
+    public void openSaveBoardMenu() {
+        ResourceBundle bundle = ResourceBundle.getBundle("textSave", resourceBundle.getLocale());
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Scenes/save_menu.fxml"), bundle);
+
+        try {
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            SaveController saveController = loader.getController();
+            saveController.startup(this);
+            stage.setScene(new Scene(root));
+            stage.setTitle("Menu");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 

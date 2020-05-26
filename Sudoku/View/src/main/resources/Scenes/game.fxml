@@ -625,7 +625,7 @@
                   <Font size="22.0" />
                </font>
             </Button>
-            <Button fx:id="saveBoardBt" mnemonicParsing="false" onAction="#saveBoard" prefWidth="190.0" text="%SaveBoardButton">
+            <Button fx:id="saveBoardBt" mnemonicParsing="false" onAction="#openSaveBoardMenu" prefWidth="190.0" text="%SaveBoardButton">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>

@@ -15,7 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
-import sudoku.Difficulty;
+import sudoku.gamestate.Difficulty;
 import view.exceptions.IOLanguageFileException;
 import view.exceptions.IllegalDifficultyException;
 
@@ -54,7 +54,7 @@ public class MenuController implements Initializable {
     public void startGame() throws IOException, IllegalDifficultyException {
         Main.logger.info("Starting new game");
         ResourceBundle bundle = ResourceBundle.getBundle("textGame", resourceBundle.getLocale());
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Scenes/game.fxml"), bundle);
         Difficulty difficulty;
         String level = ((RadioButton) difficultyGroup.getSelectedToggle()).getText();
         if (level.equals((resourceBundle.getString("EasyRadioButton")))) {
@@ -80,7 +80,7 @@ public class MenuController implements Initializable {
         Locale.setDefault(locale);
         resourceBundle = ResourceBundle.getBundle("textMenu", locale);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main_menu.fxml"), resourceBundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Scenes/main_menu.fxml"), resourceBundle);
         Parent root = loader.load();
         Main.stage.setScene(new Scene(root));
     }

@@ -64,7 +64,12 @@ public class GameController implements Initializable {
             Main.logger.error("Error creating new GameState - invalid parameters");
             e.printStackTrace();
         }
+        resetGUI(difficulty);
+    }
+
+    private void resetGUI(Difficulty difficulty) {
         displayGame();
+        resetStyle();
         this.difficulty.setText(resourceBundle.getString("DifficultyLabel").concat(difficulty.name()));
         gameName.setText(resourceBundle.getString("GameNameLabel").concat(gameState.getGameName()));
         timerDisplay();
@@ -74,13 +79,15 @@ public class GameController implements Initializable {
         return gameState;
     }
 
-    void updateGameState(SudokuBoard sudokuBoard) {
+    void updateGameState(SudokuBoard sudokuBoard, String name) {
         try {
             this.gameState = new GameState(
                     sudokuBoard,
                     gameState.getDifficulty(),
-                    gameState.getGameName()
+                    name
             );
+            i = 0;
+            resetGUI(gameState.getDifficulty());
         } catch (FieldOutOfBoundsException | InvalidFieldValueException exception) {
             Main.logger.error("Error creating new GameState - invalid parameters");
             exception.printStackTrace();
@@ -96,7 +103,6 @@ public class GameController implements Initializable {
     }
 
     void displayGame() {
-        resetStyle();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 try {

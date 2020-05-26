@@ -98,14 +98,20 @@ public class SaveController implements Initializable {
     @FXML
     private void saveToDatabase() {
         if (!name.getText().equals("")) {
-            Dao<SudokuBoard> sudokuBoardDao = new SudokuBoardDaoFactory().getJpaDao(name.getText());
+            DatabaseManager databaseManager = new DatabaseManager();
 
-            try {
-                sudokuBoardDao.write(gameController.getGameState().getCompleteBoard());
-                displayDatabaseEntries();
-                status.setText(resourceBundle.getString("saved_database"));
-            } catch (WriteBoardException exception) {
-                exception.printStackTrace();
+            if (!databaseManager.checkIfNameExists(name.getText())) {
+                Dao<SudokuBoard> sudokuBoardDao = new SudokuBoardDaoFactory().getJpaDao(name.getText());
+
+                try {
+                    sudokuBoardDao.write(gameController.getGameState().getCompleteBoard());
+                    displayDatabaseEntries();
+                    status.setText(resourceBundle.getString("saved_database"));
+                } catch (WriteBoardException exception) {
+                    exception.printStackTrace();
+                }
+            } else {
+                status.setText(resourceBundle.getString("board_exists"));
             }
         }
     }

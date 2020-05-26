@@ -31,6 +31,12 @@ public class LoadController implements Initializable {
     private TextField status;
 
     @FXML
+    private TextField idField;
+
+    @FXML
+    private TextField nameField;
+
+    @FXML
     private ListView<String> listView;
 
     private ResourceBundle resourceBundle;
@@ -70,11 +76,53 @@ public class LoadController implements Initializable {
                 Main.logger.error("Could not read selected file");
                 exception.printStackTrace();
             }
-            gameController.updateGameState(board);
+            gameController.updateGameState(board, gameController.getGameState().getGameName());
             gameController.displayGame();
 
         } else {
             status.setText(resourceBundle.getString("board_file_failed"));
+        }
+    }
+
+    @FXML
+    private void loadBoardById() {
+        DatabaseManager databaseManager = new DatabaseManager();
+
+        try {
+            long id = Long.parseLong(idField.getText());
+            String gameName = databaseManager.getNameFromId(id);
+            Dao<SudokuBoard> sudokuBoardDao = new SudokuBoardDaoFactory().getJpaDao(id);
+            SudokuBoard sudokuBoard = sudokuBoardDao.read();
+            Main.logger.info(gameName);
+
+            if (sudokuBoard != null) {
+                gameController.updateGameState(sudokuBoard, gameName);
+                status.setText(resourceBundle.getString("db_loaded"));
+            } else {
+                status.setText(resourceBundle.getString("no_record"));
+            }
+        } catch (NumberFormatException exception) {
+            status.setText(resourceBundle.getString("invalid_id"));
+        } catch (ReadBoardException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void loadBoardByName() {
+        String gameName = nameField.getText();
+        Dao<SudokuBoard> sudokuBoardDao = new SudokuBoardDaoFactory().getJpaDao(gameName);
+
+        try {
+            SudokuBoard sudokuBoard = sudokuBoardDao.read();
+            if (sudokuBoard != null) {
+                gameController.updateGameState(sudokuBoard, gameName);
+                status.setText(resourceBundle.getString("db_loaded"));
+            } else {
+                status.setText(resourceBundle.getString("no_record"));
+            }
+        } catch (ReadBoardException exception) {
+            exception.printStackTrace();
         }
     }
 

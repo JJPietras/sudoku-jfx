@@ -4,9 +4,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 
-public class DatabaseManager {
+public class DatabaseManager implements AutoCloseable {
     private final EntityManager entityManager;
 
     public DatabaseManager() {
@@ -14,11 +13,27 @@ public class DatabaseManager {
         entityManager = entityManagerFactory.createEntityManager();
     }
 
-    public Board getByID(long id) {
+    public String getNameFromId(long id) {
         entityManager.getTransaction().begin();
-        Board board = entityManager.find(Board.class, id);
+        @SuppressWarnings("unchecked")
+        List<String> results = entityManager.createQuery(
+                "SELECT name FROM Board board WHERE board.id = :i"
+        ).setParameter("i", id).getResultList();
+        if (!results.isEmpty()) {
+            String name = results.get(0);
+            entityManager.getTransaction().commit();
+            return name;
+        }
+        return "";
+    }
+
+    public boolean checkIfNameExists(String name) {
+        entityManager.getTransaction().begin();
+        boolean empty = entityManager.createQuery(
+                "SELECT board FROM Board board WHERE board.name = :n"
+        ).setParameter("n", name).getResultList().isEmpty();
         entityManager.getTransaction().commit();
-        return board;
+        return !empty;
     }
 
     public List<Board> getAllEntries() {
@@ -53,5 +68,10 @@ public class DatabaseManager {
 
     public void releaseResources() {
         entityManager.close();
+    }
+
+    @Override
+    public void close() {
+        releaseResources();
     }
 }

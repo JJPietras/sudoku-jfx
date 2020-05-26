@@ -77,11 +77,11 @@
                         </Label>
                         <HBox prefHeight="24.0" prefWidth="250.0">
                            <children>
-                              <TextField promptText="%id_num" style="-fx-background-color: #656565; -fx-background-radius: 20;">
+                              <TextField fx:id="idField" promptText="%id_num" style="-fx-background-color: #656565; -fx-background-radius: 20;">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin></TextField>
-                              <TextField promptText="%name" style="-fx-background-color: #656565; -fx-background-radius: 20;">
+                              <TextField fx:id="nameField" promptText="%name" style="-fx-background-color: #656565; -fx-background-radius: 20;">
                                  <HBox.margin>
                                     <Insets left="5.0" right="10.0" />
                                  </HBox.margin></TextField>
@@ -101,14 +101,14 @@
                            <font>
                               <Font size="16.0" />
                            </font></Button>
-                        <Button mnemonicParsing="false" text="%load_id">
+                        <Button mnemonicParsing="false" onAction="#loadBoardById" text="%load_id">
                            <VBox.margin>
                               <Insets bottom="5.0" />
                            </VBox.margin>
                            <font>
                               <Font size="16.0" />
                            </font></Button>
-                        <Button mnemonicParsing="false" text="%load_name">
+                        <Button mnemonicParsing="false" onAction="#loadBoardByName" text="%load_name">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin>

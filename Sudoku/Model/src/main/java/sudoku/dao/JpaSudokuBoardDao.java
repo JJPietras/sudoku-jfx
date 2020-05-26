@@ -9,7 +9,7 @@ import sudoku.exceptions.ReadBoardException;
 import sudoku.exceptions.WriteBoardException;
 import sudoku.model.SudokuBoard;
 
-public class JpaSudokuBoardDao implements Dao<SudokuBoard> {
+public class JpaSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
     private final EntityManager entityManager;
     private String name;
     private Long id;
@@ -59,6 +59,9 @@ public class JpaSudokuBoardDao implements Dao<SudokuBoard> {
             entityManager.getTransaction().begin();
             Board board = entityManager.find(Board.class, id);
             entityManager.getTransaction().commit();
+            if (board == null) {
+                return null;
+            }
             return board.deserialize();
 
         } catch (Exception exception) {
@@ -75,11 +78,18 @@ public class JpaSudokuBoardDao implements Dao<SudokuBoard> {
             ).setParameter("n", name).getResultList();
 
             entityManager.getTransaction().commit();
-            Board board = (Board) list.get(0);
-            return board.deserialize();
-
+            if (!list.isEmpty()) {
+                Board board = (Board) list.get(0);
+                return board.deserialize();
+            }
+            return null;
         } catch (Exception exception) {
             throw new ReadBoardException("PLACEHOLDER", exception);
         }
+    }
+
+    @Override
+    public void close() {
+        entityManager.close();
     }
 }

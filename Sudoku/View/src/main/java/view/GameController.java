@@ -139,9 +139,12 @@ public class GameController implements Initializable {
         if (!input.matches("[1-9]") && !input.equals("") || field.getText().length() > 1) {
             if (input.matches("[1-9]")) {
                 field.setText(input);
+                updateFields();
             } else {
                 field.setText("");
             }
+        } else {
+            updateFields();
         }
     };
 
@@ -212,6 +215,27 @@ public class GameController implements Initializable {
             stage.showAndWait();
 
         } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void updateFields() {
+        try {
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+
+                    String fieldValue = getField(j, i).getText();
+                    int boardIntValue = gameState.getBoard().getField(j, i, BoardType.USER);
+                    String boardValue = Integer.toString(boardIntValue);
+
+                    if (!fieldValue.equals("") && !fieldValue.equals(boardValue)) {
+                        int parsedValue = Integer.parseInt(fieldValue);
+                        gameState.getBoard().setField(j, i, parsedValue, BoardType.USER);
+                        return;
+                    }
+                }
+            }
+        } catch (FieldOutOfBoundsException | InvalidFieldValueException exception) {
             exception.printStackTrace();
         }
     }

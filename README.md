@@ -1,8 +1,8 @@
 # Component Programming - Project Sudoku
 
 |             |                	   |
-| ------------|-------------		   |
-| Term:       | IV	      	 	     |
+| ------------|-------------		     |
+| Term:       | IV	      	 	       |
 | Classes:    | Wednesday 12:00    |
 | Language:   | Java               |
 | Lecturer:   | dr Łukasz Chomątek |
@@ -13,6 +13,7 @@
 
 * JetBrains Intellij IDEA Community 2020.*
 * Gluon Scene Builder
+* Apache Maven
 
 ### Stack:
 

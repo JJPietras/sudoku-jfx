@@ -1,24 +1,38 @@
-# Programowanie Komponentowe
+# Component Programming - Project Sudoku
 
-|               |                	 |
-| ------------- |-------------		 |
-| semestr:      | IV		 	     |
-| zajęcia       | środa 12:00        |
-| język         | Java               |
-| prowadzący    | dr Łukasz Chomątek |
+|             |                	   |
+| ------------|-------------		   |
+| Term:       | IV	      	 	     |
+| Classes:    | Wednesday 12:00    |
+| Language:   | Java               |
+| Lecturer:   | dr Łukasz Chomątek |
+| Type:       | obligatory         |
+| ECTS:       | V                  |
 
-## Program Zajęć
+### Tools:
 
-#### 1. Wstęp
-#### 2. Algorytmy
-#### 3. Interfejsy
-#### 4. Model obiektowy
-#### 5. Kolekcje
-#### 6. Zewnętrzne biblioteki, nadpisywanie metod
-#### 7. Typy generyczne i komponenty dao
-#### 8. Przebudowa struktury projektu
-#### 9. Interfejsy standardowe
-#### 10. Interfejs graficzny JavaFX
-#### 11. Wyjętki i logowanie
-#### 12. Baza danych
+* JetBrains Intellij IDEA Community 2020.*
+* Gluon Scene Builder
 
+### Stack:
+
+* Java 11 LTS
+* JavaFX 15 (OpenJFX)
+* JUnit 5.6
+* JPA 2.2
+* PostgreSQL 12
+
+## Task Schedule
+
+ 1. Introduction
+ 2. Algorithms
+ 3. Interfaces
+ 4. Object Oriented Model
+ 5. Collections
+ 6. External Libraries, Method Overriding
+ 7. Generic Types i DAO Components
+ 8. Project Structure Rebuilding
+ 9. Standard Java Interfaces
+ 10. Graphics JavaFX Inteface
+ 11. Exceptions and Logging
+ 12. Database
